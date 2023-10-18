@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" media="all" href="https://sierra-library.github.io/css/styles.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    </head>
+    <body>
+        <section class="section container-medium ">
+            <div>
+                <a href="/logout" class="aligner aligner--contentEnd">Logout</button>
+            </div> 
+            <div class="container-medium">
+                <h1 class="aligner aligner--centerHoritzontal"> Helloooo {{ username }} </h1>
+                <div class="aligner aligner--centerHoritzontal">
+                    <canvas id="qr"></canvas>
+                </div>
+                <br/><br/>
+                <div class="aligner aligner--centerHoritzontal">
+                    <form id="enable_2fa" action='/save_2fa' method="POST">
+                        <input id="2fa" name="2fa" type="hidden" value="{{mfa}}">
+                        <button class="button button--primary" type="submit">
+                            {{mfa_text}}
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+            <script>
+                (function() {
+                var qr = new QRious({
+                    element: document.getElementById('qr'),
+                    size: 256,
+                    value: '{{ provision_uri }}'
+                });
+                })();
+            </script>
+
+        </section>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" media="all" href="https://sierra-library.github.io/css/styles.min.css"/>
+
+    </head>
+    <body>
+        <section class="section container-medium">
+            <form action="/2fa_auth" method="POST" id="login-form">
+                <label class="label" for="mfacode">2FA Code</label>
+                <div class="input input-fullWidth">
+                    <input id="mfacode" name="mfacode" placeholder="mfacode" type="text" required>
+                </div>
+                
+                <input id="username" name="username" type="hidden" required value="{{ user }}">
+                <button class="button button--primary" type="submit">Login</button>
+            </form>
+        </section>
+    </body>
+</html>
