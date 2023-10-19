@@ -33,4 +33,6 @@ Start the server
 ## Authors
 
 - [@SinhaAmrit](https://github.com/SinhaAmrit)
+- [@ydvXanurag](https://github.com/ydvXanurag)
 - [@studentakanksha0810](https://github.com/studentakanksha0810)
+- [@Ashutosh-Singh-Thakur](https://github.com/Ashutosh-Singh-Thakur)
