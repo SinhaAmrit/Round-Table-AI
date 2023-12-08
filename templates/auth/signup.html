@@ -1,72 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | RoundTable.AI</title>
-    <link rel="stylesheet" href="static/css/main.css">
-</head>
-
-<body>
-    <div class="bg-white dark:bg-gray-900 mt-0">
-        <div class="flex justify-center h-screen">
-            <div class="hidden bg-cover lg:block lg:w-2/3"
-                style="background-image: url(https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)">
-                <div class="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white sm:text-3xl">RoundTable.AI</h2>
-                        <p class="max-w-xl mt-3 text-gray-300">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                            autem ipsa, nulla laboriosam dolores, repellendus perferendis libero suscipit nam
-                            temporibus
-                            molestiae
-                        </p>
-                    </div>
-                </div>
+{% extends "./layouts/auth_layout.html" %}
+{% block content %}
+<div class="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
+    <div class="flex-1">
+        <div class="text-center">
+            <div class="flex justify-center mx-auto">
+                <img class="w-1/2 h-1/2 sm:h-1/4 magnet-target" src="static/images/logo.png" alt="logo">
             </div>
-            <div class="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
-                <div class="flex-1">
-                    <div class="text-center">
-                        <div class="flex justify-center mx-auto">
-                            <img class="w-1/2 h-1/2 sm:h-1/4" src="static/images/logo.png" alt="logo">
-                        </div>
 
-                        <p class="mt-3 text-gray-500 dark:text-gray-300">Sign Up to join the community</p>
-                    </div>
-                    <div class="mt-8">
-                        <form action="/" method="POST">
-                            <div>
-                                <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Email
-                                    Address</label>
-                                <input type="email" name="email" id="email" placeholder="example@example.com" required
-                                    class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
-                            </div>
-                            <div class="mt-6">
-                                <div class="flex justify-between mb-2">
-                                    <label for="password"
-                                        class="text-sm text-gray-600 dark:text-gray-200">Password</label>
-                                    <a href="#"
-                                        class="text-sm text-gray-400 focus:text-yellow-900 hover:text-yellow-900 hover:underline">Forgot
-                                        password?</a>
-                                </div>
-                                <input type="password" name="password" id="password" placeholder="Your Password"
-                                    class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
-                            </div>
-                            <button
-                                class="w-full px-4 py-2 mt-2 tracking-wide text-white transition-colors duration-300 transform bg-yellow-900 rounded-lg hover:bg-yellow-700 focus:outline-none focus:bg-yellow-700 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-                                type="submit">
-                                Sign Up
-                            </button>
-                    </div>
-                    </form>
-                    <p class="mt-6 text-sm text-center text-gray-400">Already have an account? <a href="/signin"
-                            class="text-yellow-900 focus:outline-none focus:underline hover:underline">Sign
-                            In</a>.</p>
-                </div>
-            </div>
+            <p class="mt-3 text-gray-500 dark:text-gray-300">Sign Up to join the community</p>
         </div>
+        <div class="mt-8">
+            <form action="/" method="POST" autocomplete="off">
+                <div>
+                    <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Email
+                        Address</label>
+                    <input type="email" name="email" id="email" placeholder="example@example.com" required
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                </div>
+                <div class="mt-6">
+                    <div class="flex justify-between mb-2">
+                        <label for="password" class="text-sm text-gray-600 dark:text-gray-200">Password</label>
+                        <a href="#"
+                            class="text-sm text-gray-400 focus:text-yellow-900 hover:text-yellow-900 hover:underline">Forgot
+                            password?</a>
+                    </div>
+                    <input type="password" name="password" id="password" placeholder="Your Password"
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                </div>
+                <button
+                    class="w-full px-4 py-2 mt-2 tracking-wide text-white transition-colors duration-300 transform bg-yellow-900 rounded-lg hover:bg-yellow-700 focus:outline-none focus:bg-yellow-700 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+                    type="submit">
+                    Sign Up
+                </button>
+        </div>
+        </form>
+        <p class="mt-6 text-sm text-center text-gray-400">Already have an account? <a href="/signin"
+                class="text-yellow-900 focus:outline-none focus:underline hover:underline">Sign
+                In</a>.</p>
     </div>
-</body>
-
-</html>
+</div>
+{% endblock %}

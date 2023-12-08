@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | RoundTable.AI</title>
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css"
+    integrity="sha512-HXXR0l2yMwHDrDyxJbrMD9eLvPe3z3qL3PPeozNTsiHJEENxx8DH2CxmV05iwG0dwoz5n4gQZQyYLUNt1Wdgfg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="max-h-screen w-full">
+    {% include './partials/navbar.html'%}
+    {% include './partials/page_title.html'%}
+      <!-- Remove class [ h-64 ] when adding a card block -->
+      <!-- Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border -->
+      <div class="w-full rounded">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+  </div>
+</body>
+<script src="static/js/main.js"></script>
+
+</html>
