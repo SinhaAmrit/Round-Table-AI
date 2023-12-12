@@ -1,1 +1,2 @@
 import src.comment_prediction
+import main
