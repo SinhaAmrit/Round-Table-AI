@@ -40,6 +40,10 @@ def recover_password():
 def ask_question():
     return render_template("/discussion/ask-question.html", title="Ask Question")
 
+@app.route("/question")
+def full_question():
+    return render_template("/discussion/question.html", title="Discussion")
+
 
 # ====================================Discussion Route End====================================
 
