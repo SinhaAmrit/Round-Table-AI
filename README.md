@@ -23,20 +23,9 @@ Install dependencies
   pip install -r requirements.txt
 ```
 
-```bash
-  npm install
-```
-
 Start the server
 
-Terminal 1:
-
-```bash
-  python src/app.py (Windows)
-  python3 src/app.py (Linux/MacOS)
-```
-
-Terminal 2:
+Terminal:
 
 ```bash
   python src/app.py (Windows)
