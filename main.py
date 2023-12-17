@@ -31,9 +31,9 @@ def recover_password():
 # ===================================Discussion Route Start===================================
 
 
-@app.route("/questions")
-def questions_page():
-    return render_template("discussion/questions.html", title="Questions")
+@app.route("/dashboard")
+def dashboard_page():
+    return render_template("discussion/dashboard.html", title="Dashboard")
 
 
 @app.route("/question")
@@ -44,15 +44,6 @@ def full_question():
 @app.route("/ask-question")
 def ask_question():
     return render_template("/discussion/ask-question.html", title="Ask Question")
-
-
-@app.route("/tags-list")
-def tags_list():
-    return render_template("/discussion/tags-list.html", title="Tags List")
-
-@app.route("/category")
-def category():
-    return render_template("/discussion/category.html", title="Categories")
 
 
 # ====================================Discussion Route End====================================
@@ -66,20 +57,5 @@ def page_not_found(e):
 
 
 # ======================================Error Route End======================================
-
-# =====================================Extracts Route Start=====================================
-
-
-@app.route("/user-list")
-def user_list():
-    return render_template("/extracts/user-list.html", title="User List")
-
-@app.route("/badges-list")
-def badges_list():
-    return render_template("/extracts/badges-list.html", title="Badges List")
-
-
-# =====================================Extracts Route End=====================================
-
 
 app.run(debug=True)
