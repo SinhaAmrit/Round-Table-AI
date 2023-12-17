@@ -8,6 +8,7 @@ from flask_login import login_required, current_user
 
 disc = Blueprint('discussion', __name__)
 
+                                # QUESTIONS
 #========================================================================================================
 @disc.route('/questions', methods=['GET', 'POST'])
 def questions():
@@ -19,6 +20,7 @@ def questions():
     
     return render_template("discussion/questions.html", title="Questions" )
 #========================================================================================================
+                                # QUESTION
 #========================================================================================================
 @disc.route('/question/<slug>', methods=['GET', 'POST'])
 def question(discussion_id=''):
@@ -33,17 +35,18 @@ def question(discussion_id=''):
             flash('Discussion not found', 'error')
             return redirect(url_for('discussions.questions'))
 #========================================================================================================
+                                # ASK-QUESTION
 #========================================================================================================
 @disc.route('/ask-question', methods=['GET', 'POST'])
 @login_required
-def new_discussion():
+def ask_question():
     print("Entering new_discussion function")
     if request.method == 'POST':
-        title = request.form.get('title')
-        description = request.form.get('description')
+        title = request.form.get('text')
+        details = request.form.get('details')
 
-        if len(title)>0 and len(description)>1:
-            new_discussion = Discussion(title=title, description=description, slug=generate_slug(title))
+        if title and details:
+            new_discussion = Discussion(title=title, description=details, slug=generate_slug(title))
 
             db.session.add(new_discussion)
             db.session.commit()
@@ -60,6 +63,7 @@ def generate_slug(title):
     slug = secure_filename(title.lower().replace(' ', '-'))[:50]
     return slug
 #========================================================================================================
+                                # CATEGORY
 #========================================================================================================
 @disc.route('/category', methods=['GET', 'POST'])
 def category():
