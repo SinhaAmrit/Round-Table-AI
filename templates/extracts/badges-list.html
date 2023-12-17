@@ -1,0 +1,372 @@
+{% extends "./layouts/master-layout.html" %}
+{% block content %}
+<!-- start badges-list-area -->
+<section class="question-area pt-40px pb-40px">
+    <div class="container">
+        <div class="filters pb-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between pb-4">
+                <div class="pr-3">
+                    <h3 class="fs-22 fw-medium">Badges</h3>
+                    <p class="fs-15 lh-22 my-2">Besides gaining reputation with your questions and answers, you receive
+                        badges for being especially helpful.
+                        <br> Badges appears on your profile page, questions & answers.
+                    </p>
+                </div>
+                <a href="/ask-question" class="btn theme-btn theme-btn-sm">Ask Question</a>
+            </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <form method="post" class="mr-3 w-25">
+                    <div class="form-group">
+                        <input class="form-control form--control form-control-sm h-auto lh-34" type="text" name="search"
+                            placeholder="Filter by badge name">
+                        <button class="form-btn" type="button"><i class="la la-search"></i></button>
+                    </div>
+                </form>
+                <div class="btn-group btn--group mb-3" role="group" aria-label="Filter button group">
+                    <a href="#" class="btn active">All</a>
+                    <a href="#" class="btn">Bronze</a>
+                    <a href="#" class="btn">Silver</a>
+                    <a href="#" class="btn">Gold</a>
+                </div>
+            </div>
+        </div><!-- end filters -->
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Altruist</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">First bounty you manually award on another
+                                person's question</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Analytical</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>43587</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Visited every section of the FAQ</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Announcer</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>227641</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Share a link to a post later visited by 25 unique
+                                IP addresses</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Archaeologist</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>2514</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Edit 100 posts that were inactive for 6 months</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Autobiographer</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>1367031</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Complete "About Me" section of user profile</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Benefactor</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>48793</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">First bounty you manually award on your own
+                                question</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Beta</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Voted 10 times, added 3 posts score &gt; 0, and
+                                visited the site on 3 separate days during the private beta</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Booster</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Share a link to a post later visited by 300 unique
+                                IP addresses</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Census</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Completed the annual RoundTable survey; your
+                                responses are anonymous</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Citizen Patrol</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">First flagged post</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Civic Duty</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Vote 300 or more times</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Cleanup</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">First rollback</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Commentator</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Leave 10 comments</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-3"></span> Constable</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>0</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Served as a pro-tem moderator for at least 1 year
+                                or through site graduation</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-3"></span> Copy Editor</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Edit 500 posts (excluding own or deleted posts and
+                                tag edits)</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Critic</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">First down vote</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Curious</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Ask a well-received question on 5 separate days,
+                                and maintain a positive question record</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Deputy</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Raise 80 helpful flags</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball"></span> Disciplined</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Delete own post with score of 3 or higher</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+            <div class="col-lg-3">
+                <div class="card card-item border border-gray">
+                    <div class="card-body p-3">
+                        <div class="badge-item">
+                            <a href="#" class="badge badge-md badge-dark d-inline-flex align-items-center"><span
+                                    class="ball bg-gray"></span> Documentation Beta</a>
+                            <span class="item-multiplier fs-13 fw-medium">
+                                <span>×</span>
+                                <span>32924</span>
+                            </span>
+                            <p class="fs-13 lh-18 pt-2 text-black-50">Contributed 3+ substantive pieces of documentation
+                                during the private beta</p>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col-lg-3 -->
+        </div><!-- end row -->
+        <div class="pager pt-20px">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination generic-pagination pr-1">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <p class="fs-13 pt-2">Showing 1-20 of 50,577 results</p>
+        </div>
+    </div><!-- end container -->
+</section>
+<!-- end badges-list-area -->
+{% include './partials/back-to-top.html'%}
+{% endblock %}

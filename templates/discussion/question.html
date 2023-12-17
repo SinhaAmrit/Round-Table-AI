@@ -149,7 +149,7 @@
                                                     <span class="text-success-message">Link Copied!</span>
                                                     <input type="text"
                                                         class="form-control form--control form-control-sm copy-input"
-                                                        value="copied value">
+                                                        value="{{ request.host }}{{ url_for(request.endpoint, **request.view_args) }}">
                                                     <div
                                                         class="btn-box pt-2 d-flex align-items-center justify-content-between">
                                                         <a href="#" class="btn-text copy-btn">Copy link</a>
@@ -461,7 +461,7 @@
                                                     <span class="text-success-message">Link Copied!</span>
                                                     <input type="text"
                                                         class="form-control form--control form-control-sm copy-input"
-                                                        value="copied value">
+                                                        value="{{ request.host }}{{ url_for(request.endpoint, **request.view_args) }}">
                                                     <div
                                                         class="btn-box pt-2 d-flex align-items-center justify-content-between">
                                                         <a href="#" class="btn-text copy-btn">Copy link</a>
