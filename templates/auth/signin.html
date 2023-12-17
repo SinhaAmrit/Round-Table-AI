@@ -3,7 +3,7 @@
 <!--Start Sign In area-->
 <section class="login-area pt-100px pb-80px position-relative">
     <div class="container">
-        <form action="#" class="card card-item login-form">
+        <form action="{{ url_for('auth.sign_in') }}" method="POST" class="card card-item login-form">
             <div class="card-body row p-0">
                 <div class="col-lg-6">
                     <div
