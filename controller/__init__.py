@@ -1,15 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
 
 db = SQLAlchemy()
 
-DB = 'This dict contains database credentials'
-
 def create_app():
-    app = Flask(__name__, static_folder='../static/js', template_folder="../templates")
-    app.config['SECRET_KEY'] = 'reuighsjkdvfbskerh'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DB['user']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['database']}"
+    app = Flask(__name__, static_folder='../static', template_folder="../templates")
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
     db.init_app(app)
 
 
@@ -20,7 +23,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import User
-
+    
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
