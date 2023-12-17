@@ -145,7 +145,7 @@
                                             aria-labelledby="shareDropdownMenu">
                                             <div class="py-3 px-4">
                                                 <h4 class="fs-15 pb-2">Share a link to this question</h4>
-                                                <form action="#" class="copy-to-clipboard">
+                                                <form action="{{ url_for('discussion.question') }}" method="POST" class="copy-to-clipboard">
                                                     <span class="text-success-message">Link Copied!</span>
                                                     <input type="text"
                                                         class="form-control form--control form-control-sm copy-input"
