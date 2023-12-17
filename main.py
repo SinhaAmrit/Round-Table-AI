@@ -10,9 +10,6 @@ def index_page():
     return render_template("index.html")
 
 
-@app.route("/dashboard")
-def dashboard_page():
-    return render_template("/dashboard.html", title="Dashboard")
 
 
 # =======================================Auth Route Start=======================================
@@ -36,13 +33,17 @@ def recover_password():
 # ===================================Discussion Route Start===================================
 
 
-@app.route("/ask-question")
-def ask_question():
-    return render_template("/discussion/ask-question.html", title="Ask Question")
+@app.route("/questions")
+def questions_page():
+    return render_template("discussion/questions.html", title="Questions")
 
 @app.route("/question")
 def full_question():
     return render_template("/discussion/question.html", title="Discussion")
+
+@app.route("/ask-question")
+def ask_question():
+    return render_template("/discussion/ask-question.html", title="Ask Question")
 
 
 # ====================================Discussion Route End====================================
