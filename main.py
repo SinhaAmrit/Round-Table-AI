@@ -1,60 +1,6 @@
-from flask import Flask, render_template
+from controller import create_app
 
-app = Flask(__name__, static_url_path="/static")
+app = create_app()
 
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 300
-
-
-@app.route("/")
-def index_page():
-    return render_template("index.html")
-
-
-@app.route("/dashboard")
-def dashboard_page():
-    return render_template("/dashboard.html", title="Dashboard")
-
-
-# =======================================Auth Route Start=======================================
-@app.route("/signin")
-def signin_page():
-    return render_template("auth/signin.html", title="Sign In")
-
-
-@app.route("/signup")
-def signup_page():
-    return render_template("auth/signup.html", title="Sign Up")
-
-
-@app.route("/recover-password")
-def recover_password():
-    return render_template("auth/recover-password.html", title="Recover Password")
-
-
-# =======================================Auth Route End=======================================
-
-# ===================================Discussion Route Start===================================
-
-
-@app.route("/ask-question")
-def ask_question():
-    return render_template("/discussion/ask-question.html", title="Ask Question")
-
-@app.route("/question")
-def full_question():
-    return render_template("/discussion/question.html", title="Discussion")
-
-
-# ====================================Discussion Route End====================================
-
-# =====================================Error Route Start=====================================
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template("404.html", title="Page Not Found"), 404
-
-
-# ======================================Error Route End======================================
-
-app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
