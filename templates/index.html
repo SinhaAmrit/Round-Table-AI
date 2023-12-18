@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RoundTable.AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <title>{{ title }} | RoundTable</title>
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com/" />
@@ -70,6 +71,7 @@
                                 </button>
                             </div>
                         </form>
+                        {% if current_user.is_authenticated %}
                         <div class="nav-right-button">
                             <a href="/signin" class="btn theme-btn theme-btn-outline theme-btn-outline-white mr-2"><i
                                     class="la la-sign-in mr-1"></i>
@@ -77,6 +79,7 @@
                             <a href="/signup" class="btn theme-btn theme-btn-white"><i class="la la-user mr-1"></i> Sign
                                 up</a>
                         </div>
+                        {% endif %}
                         <!-- end nav-right-button -->
                     </div>
                     <!-- end menu-wrapper -->
@@ -98,7 +101,7 @@
                 </li>
             </ul>
             <div class="off-canvas-btn-box px-4 pt-5 text-center">
-                {% if not is_signed %}
+                {% if current_user.is_authenticated %}
                     <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline">
                         <i class="la la-sign-in mr-1"></i> Sign In</a>
                     <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
