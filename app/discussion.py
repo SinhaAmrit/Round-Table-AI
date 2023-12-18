@@ -8,29 +8,20 @@ from flask_login import login_required, current_user
 
 disc = Blueprint('discussion', __name__)
 
-                                # QUESTIONS
-#========================================================================================================
-@disc.route('/questions', methods=['GET', 'POST'])
-def questions():
-    print("Entering questions function")
-    if request.method == 'POST':
-        pass
-    else:
-        pass
-    
-    return render_template("discussion/questions.html", title="Questions" )
+
 #========================================================================================================
                                 # QUESTION
 #========================================================================================================
 @disc.route('/question/<slug>', methods=['GET', 'POST'])
-def question(discussion_id=''):
+def question(slug):
     if request.method == 'POST':
         pass
     else:
-        discussion = Discussion.query.filter_by(id=discussion_id).first()
+        discussion = Discussion.query.filter_by(id=slug).first()
 
         if discussion:
-            return render_template("discussion/question.html", title="Questions", discussion=discussion)
+            disc_details = discussion[:] #parameters that want to pass to frontend
+            return render_template("discussion/question.html", title="Questions", discussion=disc_details)
         else:
             flash('Discussion not found', 'error')
             return redirect(url_for('discussions.questions'))
@@ -40,10 +31,11 @@ def question(discussion_id=''):
 @disc.route('/ask-question', methods=['GET', 'POST'])
 @login_required
 def ask_question():
-    print("Entering new_discussion function")
+    print("Entering ask_question function")
     if request.method == 'POST':
-        title = request.form.get('title')
-        details = request.form.get('details')
+        print("Entering POST Method")
+        title = request.form.get('question-title')
+        details = request.form.get('text')
 
         if title and details:
             new_discussion = Discussion(title=title, description=details, slug=generate_slug(title))
