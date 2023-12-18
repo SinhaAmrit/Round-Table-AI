@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     last_seen = db.Column(db.TIMESTAMP)
     score = db.Column(db.Integer)
     report = db.Column(db.Integer)
-    discussions = db.relationship('Discussion')
+    discussions = db.relationship('Discussion', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -48,7 +48,7 @@ class Discussion(db.Model):
     slug = db.Column(db.String(50))
     summary = db.Column(db.TEXT)
     archived = db.Column(db.Boolean, default=False)
-    user = db.relationship('User')
+    user = db.relationship('User', back_populates='discussions', overlaps="discussions")
 #========================================================================================================
                                 # CATEGORY
 #========================================================================================================
