@@ -17,7 +17,7 @@ def question(slug):
     if request.method == 'POST':
         pass
     else:
-        discussion = Discussion.query.filter_by(id=slug).first()
+        discussion = Discussion.query.filter_by(slug=slug).first()
 
         if discussion:
             disc_details = discussion[:] #parameters that want to pass to frontend
