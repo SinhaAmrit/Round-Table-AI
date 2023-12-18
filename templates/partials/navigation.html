@@ -59,7 +59,7 @@
                                     <i class="la la-bell"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown--menu dropdown-menu-right mt-3 keep-open"
-                                    aria-labelledby="notificationDropdown" style="">
+                                    aria-labelledby="notificationDropdown" style="color: blue;">
                                     <h6 class="dropdown-header"><i class="la la-bell pr-1 fs-16"></i>Notifications</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
@@ -129,7 +129,7 @@
                                     </div>
                                 </a>
                                 <div class="dropdown-menu dropdown--menu dropdown-menu-right mt-3 keep-open"
-                                    aria-labelledby="userMenuDropdown" style="">
+                                    aria-labelledby="userMenuDropdown" style="color: blue;">
                                     <h6 class="dropdown-header">Hi, Arden Smith</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
@@ -159,7 +159,7 @@
         </div><!-- end user-off-canvas-menu-close -->
 
         <!-- Signed In User Start -->
-
+        {% if current_user.is_authenticated %}
         <ul class="nav nav-tabs generic-tabs generic--tabs pt-90px pl-4 shadow-sm" id="myTab2" role="tablist">
             <li class="nav-item">
                 <div class="anim-bar" style="left: 24px; width: 96.8438px;"></div>
@@ -186,7 +186,7 @@
                                     <img src="https://ui-avatars.com/api/?background=random&name=John+Doe" alt="avatar">
                                 </div>
                                 <div class="media-body p-0 border-left-0">
-                                    <h5 class="fs-14 fw-regular">John Doe following your post</h5>
+                                    <h5 class="fs-14 fw-regular">{{ current_user.username }}</h5>
                                     <small class="meta d-block lh-24">
                                         <span>45 secs ago</span>
                                     </small>
@@ -235,15 +235,16 @@
                                 class="la la-bell mr-2"></i>Notifications</a>
                         <a class="dropdown-item" href="/referrals"><i class="la la-user-plus mr-2"></i>Referrals</a>
                         <a class="dropdown-item" href="/settings"><i class="la la-gear mr-2"></i>Settings</a>
-                        <a class="dropdown-item" href="/"><i class="la la-power-off mr-2"></i>Sign out</a>
+                        <a class="dropdown-item" href="/signout"><i class="la la-power-off mr-2"></i>Sign out</a>
                     </div>
                 </div>
             </div><!-- end tab-pane -->
         </div>
 
         <!-- Signed In User End -->
+        {% else %}
         <!-- Guest Start -->
-        <!-- <ul class="generic-list-item off-canvas-menu-list pt-90px">
+        <ul class="generic-list-item off-canvas-menu-list pt-90px">
             <li>
                 <a href="/dashboard">dashboard<button class="sub-nav-toggler" type="button"><i class="la la-file-text mr-1 text-black"></i></button></a>
             </li>
@@ -257,7 +258,8 @@
                 Sign In</a>
             <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
             <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
-        </div> -->
+        </div> 
+        {% endif %}
         <!-- Guest End -->
     </div><!-- end user-off-canvas-menu -->
     <div class="mobile-search-form">
