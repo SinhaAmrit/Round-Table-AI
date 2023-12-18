@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db, login_manager
@@ -26,9 +26,10 @@ def sign_up():
         If POST: Redirects to the questions page or current path.
         If GET: Renders the sign-up page.
     """
-    print(current_user.is_authenticated)
     next_url = request.args.get('next')
-    print("Entering sign_up function")
+    if request.method == 'GET' and next_url:
+        session['next_url'] = next_url
+
     if request.method == 'POST':
         print("Handling POST request")
         name = request.form.get('name')
@@ -36,7 +37,6 @@ def sign_up():
         email = request.form.get('email')
         password = request.form.get('password')
         opt_in = 'opt-in' in request.form
-        print("data accepted from form successfully")
         if not (name and username and email and password):
             flash('Enter all fields.', category='error')
         else:
@@ -53,25 +53,18 @@ def sign_up():
                 # condition passed, create a new user
                 hashed_password = generate_password_hash(password, method='sha256')
                 new_user = User(email=email, name=name, username=username, password_hash=hashed_password)
-                print("User created successfully!")
 
                 db.session.add(new_user)
                 db.session.commit()
                 login_user(new_user, remember=False)
                 flash('Account created!', category='success')
-                print('session created successfully!')
+                next_url = session.pop('next_url', None)
                 if not next_url:
-                    # Redirect to '/dashboard'
                     return redirect('/dashboard')
                 else:
-                    return redirect(url_for('auth.login'), next=next_url)
-            
-        if not next_url:
-                # Redirect to '/dashboard'
-            return redirect(url_for('auth.sign_up'))
-        else:
-            return redirect(url_for('auth.sign_up'), next=next_url)
-    print("Handling GET")
+                    return redirect(url_for(next_url))
+
+        return redirect(url_for('auth.sign_up'))
     return render_template("auth/signup.html", title="Sign Up")
 #========================================================================================================
 def is_valid_username(username):
@@ -158,11 +151,11 @@ def login():
         If POST: Redirects to the questions page or current path.
         If GET: Renders the sign-in page.
     """
-    print("Entering sign_in function")
-    print(current_user.is_authenticated)
+    next_url = request.args.get('next')
+    if request.method == 'GET' and next_url:
+        session['next_url'] = next_url
+    is_error_occur = False
     if request.method == 'POST':
-        next_url = request.args.get('next')
-        print(f"Handling POST request from endpoint {request.endpoint} and next {next_url}")
         email = request.form.get('email')
         password = request.form.get('password')
         remember = request.form.get('rememberMe')
@@ -170,7 +163,7 @@ def login():
         # Check if the identifier is an email
         if not (email and password):
             flash('Enter email and password, try again.', category='error')
-            return render_template("auth/signin.html", title="Sign In")
+            is_error_occur = True
         else:
             user = User.query.filter_by(email=email).first()
         # If the identifier is not an email, check if it's a username
@@ -182,23 +175,22 @@ def login():
             print("User found")
             if check_password_hash(user.password_hash, password):
                 login_user(user, remember=remember)
-
+                next_url = session.pop('next_url', None)
                 if not next_url:
-                    # Redirect to '/dashboard'
                     return redirect('/dashboard')
                 else:
                     return redirect(url_for(next_url))
                 
             else:
                 flash('Incorrect password, try again.', category='error')
-                return redirect(url_for('auth.login'), next=next_url)
+                is_error_occur = True
         else:
             print("User not found")
             flash('User does not exist.', category='error')
-            if next_url:
-                return redirect(url_for('auth.login'), next=next_url)
-            else:
-                return redirect(url_for('auth.login'))
+            is_error_occur = True
+
+    if is_error_occur:
+        return redirect(url_for('auth.login'))
     
     print("Handling GET")
     return render_template("auth/signin.html", title="Sign In")
@@ -213,6 +205,10 @@ def recover_password():
     Returns:
         Renders the password recovery page.
     """
+    if request.method == 'POST':
+        email = request.form.get('email')
+        
+
     return render_template("auth/recover-password.html", title="Recover Password")
 #========================================================================================================
                                 # Sign Out
