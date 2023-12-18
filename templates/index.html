@@ -61,7 +61,7 @@
                             <!-- end ul -->
                         </nav>
                         <!-- end main-menu -->
-                        <form method="post" class="mr-4">
+                        <form action="{{ url_for('views.home') }}" method="post" class="mr-4">
                             <div class="form-group mb-0">
                                 <input class="form-control form--control form--control-bg-gray text-white" type="text"
                                     name="search" placeholder="Type your search words..." />
@@ -98,10 +98,12 @@
                 </li>
             </ul>
             <div class="off-canvas-btn-box px-4 pt-5 text-center">
-                <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline" <i
-                    class="la la-sign-in mr-1"></i> Sign In</a>
-                <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
-                <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
+                {% if not is_signed %}
+                    <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline">
+                        <i class="la la-sign-in mr-1"></i> Sign In</a>
+                    <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
+                    <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
+                {% endif %}
             </div>
         </div>
         <!-- end off-canvas-menu -->
