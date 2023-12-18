@@ -42,7 +42,7 @@ def question(discussion_id=''):
 def ask_question():
     print("Entering new_discussion function")
     if request.method == 'POST':
-        title = request.form.get('text')
+        title = request.form.get('title')
         details = request.form.get('details')
 
         if title and details:
@@ -74,4 +74,42 @@ def category():
         pass
     
     return render_template("discussion/category.html", title="Questions" )
+#========================================================================================================
+                                # DASHBOARD
+#========================================================================================================
+@disc.route("/dashboard")
+def dashboard():
+    # Sample data, replace it with your actual data retrieval logic
+    discussions = get_discussions()
+    categories = get_categories()
+    tags = get_tags()
+
+    # Retrieve filters from query parameters
+    selected_category = request.args.get('category', 'All')
+    selected_tag = request.args.get('tag', 'All')
+
+    # Apply filters
+    filtered_discussions = filter_discussions(discussions, selected_category, selected_tag)
+
+    return render_template("discussion/dashboard.html", title="Dashboard",
+                            discussions=filtered_discussions, categories=categories, tags=tags, 
+                            selected_category=selected_category, selected_tag=selected_tag)
+
+# Add helper functions to retrieve data and filter discussions
+def get_discussions():
+    # Implement your logic to retrieve discussions from the database or any other source
+    pass
+
+def get_categories():
+    # Implement your logic to retrieve categories from the database or any other source
+    pass
+
+def get_tags():
+    # Implement your logic to retrieve tags from the database or any other source
+    pass
+
+def filter_discussions(discussions, category, tag):
+    # Implement your logic to filter discussions based on the selected category and tag
+    pass
+
 #========================================================================================================
