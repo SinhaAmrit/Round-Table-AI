@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
     score = db.Column(db.Integer)
     report = db.Column(db.Integer)
     discussions = db.relationship('Discussion', back_populates='user')
+    notifications = db.relationship('Notification', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -76,7 +77,8 @@ class Notification(db.Model):
     type = db.Column(db.String(50))
     data = db.Column(db.TEXT)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
-    read_at = db.Column(db.TIMESTAMP)
+    read_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
+    user = db.relationship('User', back_populates='notifications')
 #========================================================================================================
                                 # REPLY
 #========================================================================================================
