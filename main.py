@@ -58,4 +58,3 @@ def page_not_found(e):
 
 # ======================================Error Route End======================================
 
-app.run(debug=True)
