@@ -10,9 +10,7 @@ views = Blueprint('views', __name__)
 #========================================================================================================
 @views.route('/')
 def home():
-    is_signed = current_user.is_authenticated
-    print(is_signed)
-    return render_template('index.html', is_signed=is_signed)
+    return render_template('index.html',title="Home")
 #========================================================================================================
                                 # Page Not Found
 #========================================================================================================
