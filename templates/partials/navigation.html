@@ -50,23 +50,6 @@
                             </li>
                         </ul><!-- end ul -->
                     </nav><!-- end main-menu -->
-
-                    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
-                        <div class="alert alert-danger alter-dismissable fade show" role="alert"> 
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        {% else %}
-                        <div class="alert alert-success alter-dismissable fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        {% endif %} {% endfor %} {% endif %} {% endwith %}
-
                     <div class="nav-right-button">
                         <ul class="user-action-wrap d-flex align-items-center">
                             <li class="dropdown">
@@ -292,5 +275,23 @@
         </div>
     </div><!-- end mobile-search-form -->
     <div class="body-overlay"></div>
+    <!-- flash-messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert"> 
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <!-- end flash-messages -->
+
 </header>
 <!-- End Navigation-area -->
