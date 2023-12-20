@@ -26,6 +26,26 @@ def recover_password():
     return render_template("auth/recover-password.html", title="Recover Password")
 
 
+@app.route("/user-profile")
+def user_profile():
+    return render_template("account/user-profile.html", title="Profile")
+
+
+@app.route("/settings")
+def settings():
+    return render_template("account/settings.html", title="Settings")
+
+
+@app.route("/notifications")
+def notifications():
+    return render_template("account/notifications.html", title="Notifications")
+
+
+@app.route("/referrals")
+def referrals():
+    return render_template("account/referrals.html", title="Referrals")
+
+
 # =======================================Auth Route End=======================================
 
 # ===================================Discussion Route Start===================================
