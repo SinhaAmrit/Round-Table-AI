@@ -26,6 +26,11 @@ def recover_password():
     return render_template("auth/recover-password.html", title="Recover Password")
 
 
+@app.route("/user-profile")
+def user_profile():
+    return render_template("auth/user-profile.html", title="Profile")
+
+
 # =======================================Auth Route End=======================================
 
 # ===================================Discussion Route Start===================================
