@@ -16,18 +16,21 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True, nullable=False)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     secret_key = db.Column(db.String(125))
-    country = db.Column(db.String(25))
+    country = db.Column(db.String(25), default='Country')
     role = db.Column(db.String(25))
+    about = db.Column(db.TEXT)
     email_varified_at = db.Column(db.TIMESTAMP)
     update_at = db.Column(db.TIMESTAMP)
     conneted_accounts = db.Column(UUID(as_uuid=True), db.ForeignKey('conn_account.id'))
     mob = db.Column(db.String(10))
     status = db.Column(db.String(16))
     last_seen = db.Column(db.TIMESTAMP)
-    score = db.Column(db.Integer)
-    report = db.Column(db.Integer)
+    score = db.Column(db.Integer, default=0)
+    report = db.Column(db.Integer, default=0)
     discussions = db.relationship('Discussion', back_populates='user')
     notifications = db.relationship('Notification', back_populates='user')
+    conn_accounts = db.relationship('ConnAccount')
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -47,6 +50,7 @@ class Discussion(db.Model):
     deleted_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     image_id = db.Column(UUID(as_uuid=True), nullable=True, default=None)
     slug = db.Column(db.String(50))
+    vote = db.Column(db.Integer, default=0)
     summary = db.Column(db.TEXT)
     archived = db.Column(db.Boolean, default=False)
     user = db.relationship('User', back_populates='discussions', overlaps="discussions")
@@ -89,6 +93,7 @@ class Reply(db.Model):
     content = db.Column(db.TEXT)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     deleted_at = db.Column(db.TIMESTAMP)
+    vote = db.Column(db.Integer, default=0)
 #========================================================================================================
                                 # HISTORY
 #========================================================================================================

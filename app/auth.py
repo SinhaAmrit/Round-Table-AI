@@ -26,6 +26,8 @@ def sign_up():
         If POST: Redirects to the questions page or current path.
         If GET: Renders the sign-up page.
     """
+    if current_user.is_authenticated:
+        return redirect(redirect(url_for('views.home')))
     next_url = request.args.get('next')
     if request.method == 'GET' and next_url:
         session['next_url'] = next_url
@@ -151,6 +153,8 @@ def login():
         If POST: Redirects to the questions page or current path.
         If GET: Renders the sign-in page.
     """
+    if current_user.is_authenticated:
+        return redirect(redirect(url_for('views.home')))
     next_url = request.args.get('next')
     if request.method == 'GET' and next_url:
         session['next_url'] = next_url
@@ -250,6 +254,8 @@ def unauthorized_callback():
         The 'auth.login' endpoint is expected to handle user login functionality.
         The 'next' parameter is used to redirect the user back to the originally requested page after successful login.
     """
+    if request.endpoint == 'auth.sign_out':
+        return redirect(url_for('views.home'))
     flash('Sign in first to access this page!', category='error')
     # Redirects the user to the login page while preserving the originally requested page (if available)
     return redirect(url_for('auth.login', next=request.endpoint))

@@ -33,15 +33,18 @@ def create_app():
     from .views import views
     from .auth import auth
     from .discussion import disc
-    from .notification import notif
+    from .account import acc
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(disc, url_prefix='/')
-    app.register_blueprint(notif, url_prefix='/')
+    app.register_blueprint(acc, url_prefix='/')
 
     # Import User model
     from .models import User
+
+    with app.app_context():
+        db.create_all()
 
     # Configure Flask-Login
     login_manager.login_view = 'auth.login'
