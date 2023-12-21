@@ -33,10 +33,12 @@ def create_app():
     from .views import views
     from .auth import auth
     from .discussion import disc
+    from .notification import notif
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(disc, url_prefix='/')
+    app.register_blueprint(notif, url_prefix='/')
 
     # Import User model
     from .models import User
