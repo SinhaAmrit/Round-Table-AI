@@ -12,14 +12,10 @@
                         </div>
                         <div class="user-off-canvas-menu-toggle icon-element icon-element-xs shadow-sm"
                             data-toggle="tooltip" data-placement="top" title="" data-original-title="User menu">
-                            {% if signed_in %}
                                 <!-- Signed I User --><i class="la la-user"></i>
                             <!-- Run scripts for signed-in users -->
-                            {% else %}
                                 <!-- Guest --><i class="la la-bars"></i>
-                            <!-- Run scripts for guests or signed-out users -->
-                            {% endif %}
-                            
+                            <!-- Run scripts for guests or signed-out users -->                            
                         </div>
                     </div>
                 </div>
@@ -43,13 +39,14 @@
                             <button class="form-btn" type="button"><i class="la la-search"></i></button>
                         </div>
                     </form>
+                    <!--
                     <nav class="menu-bar ml-auto pr-2">
                         <ul>
                             <li>
                                 <a href="/"><i class="ri-home-2-line"></i>&nbsp;Home</a>
                             </li>
                         </ul><!-- end ul -->
-                    </nav><!-- end main-menu -->
+                    <!---</nav><!-- end main-menu -->
                     {% if current_user.is_authenticated %}
                     <div class="nav-right-button">
                         <ul class="user-action-wrap d-flex align-items-center">
@@ -64,7 +61,7 @@
                                     <h6 class="dropdown-header"><i class="la la-bell pr-1 fs-16"></i>Notifications</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
-                                    {% for notification in current_user.notifications %}
+                                    {% for notification in current_user.notifications[:5]|reverse %}
                                         <a class="dropdown-item" href="/notifications">
                                             <div class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                                 <div class="media-img media-img-sm flex-shrink-0">

@@ -71,7 +71,7 @@
                                 </button>
                             </div>
                         </form>
-                        {% if current_user.is_authenticated %}
+                        {% if not current_user.is_authenticated %}
                         <div class="nav-right-button">
                             <a href="/signin" class="btn theme-btn theme-btn-outline theme-btn-outline-white mr-2"><i
                                     class="la la-sign-in mr-1"></i>
@@ -95,19 +95,19 @@
                 <i class="la la-times"></i>
             </div>
             <!-- end off-canvas-menu-close -->
-            <ul class="generic-list-item off-canvas-menu-list pt-90px">
+            <!--<ul class="generic-list-item off-canvas-menu-list pt-90px">
                 <li>
-                    <a href="#">Home</a>
+                    <a href="/">Home</a>
                 </li>
-            </ul>
-            <div class="off-canvas-btn-box px-4 pt-5 text-center">
-                {% if current_user.is_authenticated %}
+            </ul>--->
+            {% if not current_user.is_authenticated %}
+                <div class="off-canvas-btn-box px-4 pt-5 text-center">
                     <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline">
                         <i class="la la-sign-in mr-1"></i> Sign In</a>
                     <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
                     <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
         <!-- end off-canvas-menu -->
         <div class="mobile-search-form">
