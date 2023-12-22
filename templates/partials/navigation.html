@@ -13,8 +13,14 @@
                         </div>
                         <div class="user-off-canvas-menu-toggle icon-element icon-element-xs shadow-sm"
                             data-toggle="tooltip" data-placement="top" title="" data-original-title="User menu">
-                            <!-- Guest <i class="la la-bars"></i> -->
-                            <!-- Signed I User --><i class="la la-user"></i>
+                            {% if signed_in %}
+                                <!-- Signed I User --><i class="la la-user"></i>
+                            <!-- Run scripts for signed-in users -->
+                            {% else %}
+                                <!-- Guest --><i class="la la-bars"></i>
+                            <!-- Run scripts for guests or signed-out users -->
+                            {% endif %}
+                            
                         </div>
                     </div>
                 </div>
@@ -38,6 +44,14 @@
                             <button class="form-btn" type="button"><i class="la la-search"></i></button>
                         </div>
                     </form>
+                    <nav class="menu-bar ml-auto pr-2">
+                        <ul>
+                            <li>
+                                <a href="/"><i class="ri-home-2-line"></i>&nbsp;Home</a>
+                            </li>
+                        </ul><!-- end ul -->
+                    </nav><!-- end main-menu -->
+                    {% if current_user.is_authenticated %}
                     <div class="nav-right-button">
                         <ul class="user-action-wrap d-flex align-items-center">
                             <li class="dropdown">
@@ -47,55 +61,68 @@
                                     <i class="la la-bell"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown--menu dropdown-menu-right mt-3 keep-open"
-                                    aria-labelledby="notificationDropdown" style="">
+                                    aria-labelledby="notificationDropdown" style="color: blue;">
                                     <h6 class="dropdown-header"><i class="la la-bell pr-1 fs-16"></i>Notifications</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
+                                    {% for notification in current_user.notifications %}
                                         <a class="dropdown-item" href="/notifications">
-                                            <div
-                                                class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
+                                            <div class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                                 <div class="media-img media-img-sm flex-shrink-0">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=John+Doe"
+                                                    <img src="https://ui-avatars.com/api/?background=random&name={{ notification.type}}"
                                                         alt="avatar">
                                                 </div>
-                                                <div class="media-body p-0 border-left-0">
-                                                    <h5 class="fs-14 fw-regular">John Doe following your post</h5>
-                                                    <small class="meta d-block lh-24">
-                                                        <span>45 secs ago</span>
-                                                    </small>
-                                                </div>
+                                            <div class="media-body p-0 border-left-0">
+                                                <h5 class="fs-14 fw-regular">{{ notification.data }}</h5>
+                                                <small class="meta d-block lh-24">
+                                                    <span class="humanized-time" data-timestamp="{{ notification.created_at.timestamp() * 1000 }}">
+                                                        {{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                                                </small>
                                             </div>
-                                        </a>
-                                        <a class="dropdown-item" href="/notifications">
-                                            <div
-                                                class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
-                                                <div class="media-img media-img-sm flex-shrink-0">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Arnold+Smith"
-                                                        alt="avatar">
-                                                </div>
-                                                <div class="media-body p-0 border-left-0">
-                                                    <h5 class="fs-14 fw-regular">Arnold Smith answered on your post</h5>
-                                                    <small class="meta d-block lh-24">
-                                                        <span>5 mins ago</span>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item" href="/notifications">
-                                            <div
-                                                class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
-                                                <div class="media-img media-img-sm flex-shrink-0">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Saeed"
-                                                        alt="avatar">
-                                                </div>
-                                                <div class="media-body p-0 border-left-0">
-                                                    <h5 class="fs-14 fw-regular">Saeed bookmarked your post</h5>
-                                                    <small class="meta d-block lh-24">
-                                                        <span>1 hour ago</span>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </a>
+                                        </div>
+                                    </a>
+                                    {% endfor %}
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                        var humanizedTimes = document.querySelectorAll('.humanized-time');
+
+                                        humanizedTimes.forEach(function (element) {
+                                        var timestamp = parseInt(element.getAttribute('data-timestamp'));
+                                        var secondsAgo = Math.floor((Date.now() - timestamp) / 1000);
+
+                                        var interval = Math.floor(secondsAgo / 60);
+                                        if (interval < 1) {
+                                            element.textContent = "Just now";
+                                        } else if (interval < 60) {
+                                            element.textContent = interval + " minute" + (interval > 1 ? 's' : '') + " ago";
+                                        } else {
+                                            interval = Math.floor(interval / 60);
+                                        if (interval < 24) {
+                                            element.textContent = interval + " hour" + (interval > 1 ? 's' : '') + " ago";
+                                        } else {
+                                            interval = Math.floor(interval / 24);
+                                            if (interval < 7) {
+                                                element.textContent = interval + " day" + (interval > 1 ? 's' : '') + " ago";
+                                            } else {
+                                                interval = Math.floor(interval / 7);
+                                                if (interval < 4) {
+                                                    element.textContent = interval + " week" + (interval > 1 ? 's' : '') + " ago";
+                                                } else {
+                                                    interval = Math.floor(interval / 4);
+                                                    if (interval < 12) {
+                                                        element.textContent = interval + " month" + (interval > 1 ? 's' : '') + " ago";
+                                                    } else {
+                                                        interval = Math.floor(interval / 12);
+                                                    element.textContent = interval + " year" + (interval > 1 ? 's' : '') + " ago";
+                                                        }
+                                                    }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    });
+                                    </script>
+
                                     </div>
                                     <a class="dropdown-item pb-1 border-bottom-0 text-center btn-text fw-regular"
                                         href="/notifications">View All Notifications <i
@@ -108,17 +135,18 @@
                                     <div
                                         class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                         <div class="media-img media-img-xs flex-shrink-0 rounded-full mr-2">
-                                            <img src="https://ui-avatars.com/api/?background=random&name=Arden+Smith"
+                                            <img src="https://ui-avatars.com/api/?background=random&name={{ current_user.name }}"
                                                 alt="avatar" class="rounded-full">
                                         </div>
                                         <div class="media-body p-0 border-left-0">
-                                            <h5 class="fs-14">Arden Smith</h5>
+                                            <h5 class="fs-14">{{ current_user.username }}</h5>
                                         </div>
                                     </div>
                                 </a>
+
                                 <div class="dropdown-menu dropdown--menu dropdown-menu-right mt-3 keep-open"
-                                    aria-labelledby="userMenuDropdown" style="">
-                                    <h6 class="dropdown-header">Hi, Arden Smith</h6>
+                                    aria-labelledby="userMenuDropdown" style="color: blue;">
+                                    <h6 class="dropdown-header">Hi, {{ current_user.name }}</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
                                         <a class="dropdown-item" href="/user-profile"><i
@@ -129,13 +157,22 @@
                                                 class="la la-user-plus mr-2"></i>Referrals</a>
                                         <a class="dropdown-item" href="/settings"><i
                                                 class="la la-gear mr-2"></i>Settings</a>
-                                        <a class="dropdown-item" href="/"><i class="la la-power-off mr-2"></i>Sign
-                                            out</a>
+                                        <a class="dropdown-item" href="/signout"><i
+                                                class="la la-power-off mr-2"></i>Sign out</a>
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div><!-- end nav-right-button -->
+                    {% else %}
+                    <div class="nav-right-button">
+                        <a href="/signin" class="btn theme-btn theme-btn-outline theme-btn-outline-blue mr-2"><i
+                                class="la la-sign-in mr-1"></i>
+                            Sign In</a>
+                        <a href="/signup" class="btn theme-btn theme-btn-blue"><i class="la la-user mr-1"></i> Sign
+                            up</a>
+                    </div>
+                    {% endif %}
                 </div><!-- end menu-wrapper -->
             </div><!-- end col-lg-10 -->
         </div><!-- end row -->
@@ -147,7 +184,7 @@
         </div><!-- end user-off-canvas-menu-close -->
 
         <!-- Signed In User Start -->
-
+        {% if current_user.is_authenticated %}
         <ul class="nav nav-tabs generic-tabs generic--tabs pt-90px pl-4 shadow-sm" id="myTab2" role="tablist">
             <li class="nav-item">
                 <div class="anim-bar" style="left: 24px; width: 96.8438px;"></div>
@@ -174,7 +211,7 @@
                                     <img src="https://ui-avatars.com/api/?background=random&name=John+Doe" alt="avatar">
                                 </div>
                                 <div class="media-body p-0 border-left-0">
-                                    <h5 class="fs-14 fw-regular">John Doe following your post</h5>
+                                    <h5 class="fs-14 fw-regular">{{ current_user.username }}</h5>
                                     <small class="meta d-block lh-24">
                                         <span>45 secs ago</span>
                                     </small>
@@ -222,15 +259,16 @@
                         <a class="dropdown-item" href="/notifications"><i class="la la-bell mr-2"></i>Notifications</a>
                         <a class="dropdown-item" href="/referrals"><i class="la la-user-plus mr-2"></i>Referrals</a>
                         <a class="dropdown-item" href="/settings"><i class="la la-gear mr-2"></i>Settings</a>
-                        <a class="dropdown-item" href="/"><i class="la la-power-off mr-2"></i>Sign out</a>
+                        <a class="dropdown-item" href="/signout"><i class="la la-power-off mr-2"></i>Sign out</a>
                     </div>
                 </div>
             </div><!-- end tab-pane -->
         </div>
 
         <!-- Signed In User End -->
+        {% else %}
         <!-- Guest Start -->
-        <!-- <ul class="generic-list-item off-canvas-menu-list pt-90px">
+        <ul class="generic-list-item off-canvas-menu-list pt-90px">
             <li>
                 <a href="/dashboard">dashboard<button class="sub-nav-toggler" type="button"><i class="la la-file-text mr-1 text-black"></i></button></a>
             </li>
@@ -244,7 +282,8 @@
                 Sign In</a>
             <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
             <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
-        </div> -->
+        </div> 
+        {% endif %}
         <!-- Guest End -->
     </div><!-- end user-off-canvas-menu -->
     <div class="mobile-search-form">
@@ -262,5 +301,23 @@
         </div>
     </div><!-- end mobile-search-form -->
     <div class="body-overlay"></div>
+    <!-- flash-messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert"> 
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <!-- end flash-messages -->
+
 </header>
 <!-- End Navigation-area -->

@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from app import create_app
 
-app = Flask(__name__, static_url_path="/static")
+app = create_app()
 
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 300
 
@@ -77,4 +77,3 @@ def page_not_found(e):
 
 
 # ======================================Error Route End======================================
-

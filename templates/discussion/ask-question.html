@@ -107,13 +107,13 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card card-item">
-                    <form method="post" class="card-body">
+                    <form action="{{ url_for('discussion.ask_question') }}" method="post" class="card-body">
                         <div class="input-box">
                             <label class="fs-14 text-black fw-medium mb-0">Question Title</label>
                             <p class="fs-13 pb-3 lh-20">Be specific and imagine you’re asking a question to another
                                 person</p>
                             <div class="form-group">
-                                <input class="form-control form--control" type="text" name="text"
+                                <input class="form-control form--control" type="text" name="question-title"
                                     placeholder="e.g. Is there an R function for finding the index of an element in a vector?">
                             </div>
                         </div><!-- end input-box -->

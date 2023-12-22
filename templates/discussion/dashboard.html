@@ -579,7 +579,7 @@
                                 never receive recruiter spam or see fake job listings on our site.</p>
                             <div class="filters pb-4">
                                 <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                    <form method="post" class="flex-grow-1 mr-3">
+                                    <form action="{{ url_for('discussion.dashboard') }}" method="post" class="flex-grow-1 mr-3">
                                         <div class="form-group mb-0">
                                             <input class="form-control form--control form-control-sm h-auto lh-34"
                                                 type="text" name="search" placeholder="Type here to find jobs...">
@@ -596,7 +596,7 @@
                                 </div><!-- end d-flex -->
                                 <div class="collapse pt-3" id="collapseSearchAdvanced">
                                     <div class="card card-item mb-0">
-                                        <form method="post" class="search-advanced card-body pb-1">
+                                        <form action="{{ url_for('discussion.dashboard') }}" method="post" class="search-advanced card-body pb-1">
                                             <div class="search-advanced-item mb-10px row align-items-center">
                                                 <div class="col-lg-6">
                                                     <h4 class="fs-16">Filters</h4>
@@ -1658,7 +1658,7 @@
                                     Using the right tags makes it easier for others to find and answer your question.
                                 </p>
                                 <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                    <form method="post" class="flex-grow-1 mr-3">
+                                    <form action="{{ url_for('discussion.dashboard') }}" method="post" class="flex-grow-1 mr-3">
                                         <div class="form-group mb-0">
                                             <input class="form-control form--control form-control-sm h-auto lh-34"
                                                 type="text" name="search" placeholder="Filter by tag name...">
@@ -1921,7 +1921,7 @@
                             <div class="filters pb-4">
                                 <h3 class="fs-17 fw-medium pb-4">Users</h3>
                                 <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                    <form method="post" class="flex-grow-1 mr-3">
+                                    <form action="{{ url_for('discussion.dashboard') }}" method="post" class="flex-grow-1 mr-3">
                                         <div class="form-group mb-0">
                                             <input class="form-control form--control form-control-sm h-auto lh-34"
                                                 type="text" name="search" placeholder="Filter by user...">
