@@ -20,12 +20,6 @@ def all_notification():
                                 notifications=current_user.notifications)
 
 
-@acc.route('/notifications', methods=['GET', 'POST'])
-@login_required
-def notification():
-    return render_template("accounts/notifications.html", title="Notifications", notification=current_user.notifications)
-
-
 @acc.route('/user-profile', methods=['GET', 'POST'])
 @login_required
 def user_profile():
@@ -61,10 +55,10 @@ def format_time_difference(time_difference):
 
 @acc.route('/referrals', methods=['GET', 'POST'])
 @login_required
-def notification():
+def referrals():
     return render_template("account/referrals.html", title="Referrals")
 
 @acc.route('/settings', methods=['GET', 'POST'])
 @login_required
-def notification():
+def settings():
     return render_template("account/settings.html", title="Settings")
