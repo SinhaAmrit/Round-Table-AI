@@ -20,23 +20,17 @@ def all_notification():
                                 notifications=current_user.notifications)
 
 
-@acc.route('/notifications/<id>', methods=['GET', 'POST'])
+@acc.route('/notifications', methods=['GET', 'POST'])
 @login_required
-def notification(id):
-    if request.method == 'POST':
-        pass
-    else:
-        current_notifications = Notification.query.filter_by(id=id, user_id=current_user.id).first()
-
-        if current_notifications:
-            return render_template("notification/details.html", title="Notifications", notification=current_notifications)
+def notification():
+    return render_template("accounts/notifications.html", title="Notifications", notification=current_user.notifications)
 
 
-@acc.route('/user-profile/<username>', methods=['GET', 'POST'])
+@acc.route('/user-profile', methods=['GET', 'POST'])
 @login_required
-def user_profile(username):
+def user_profile():
 
-    user = User.query.filter_by(username=username).first()
+    user = current_user
     if user is None:
         return redirect(url_for('views.home'))
     # Convert current_user_created_at to datetime object
@@ -64,3 +58,13 @@ def format_time_difference(time_difference):
         return f"{months} {'month' if months == 1 else 'months'} ago"
     else:
         return f"{days} {'day' if days == 1 else 'days'} ago"
+
+@acc.route('/referrals', methods=['GET', 'POST'])
+@login_required
+def notification():
+    return render_template("account/referrals.html", title="Referrals")
+
+@acc.route('/settings', methods=['GET', 'POST'])
+@login_required
+def notification():
+    return render_template("account/settings.html", title="Settings")
