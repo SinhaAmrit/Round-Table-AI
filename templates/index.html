@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
-    <title>{{ title }} | RoundTable</title>
+   <title>RoundTable.AI</title>
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com/" />
@@ -13,6 +12,7 @@
         rel="stylesheet" />
 
     <!-- Favicon -->
+
     <link rel="icon" sizes="16x16" href="static/images/favicon.png" />
 
     <!-- inject:css -->
@@ -21,8 +21,12 @@
     <link rel="stylesheet" href="static/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="static/css/owl.theme.default.min.css" />
     <link rel="stylesheet" href="static/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/sheryjs/dist/Shery.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <!-- end inject -->
 </head>
 
@@ -94,7 +98,7 @@
             <!-- end off-canvas-menu-close -->
             <!--<ul class="generic-list-item off-canvas-menu-list pt-90px">
                 <li>
-                    <a href="/dashboard">Dashboard</a>
+                    <a href="#">Home</a>
                 </li>
             </ul>--->
             {% if not current_user.is_authenticated %}
