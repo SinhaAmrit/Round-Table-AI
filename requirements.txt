@@ -70,3 +70,4 @@ urllib3==1.26.18
 userpath==1.9.1
 validate-pyproject==0.13.post1.dev0+gb752273.d20230520
 Werkzeug==2.3.8
+gunicorn
