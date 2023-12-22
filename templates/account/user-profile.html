@@ -14,12 +14,12 @@
                 <div class="hero-content">
                     <div class="media media-card align-items-center shadow-none p-0 mb-0 rounded-0 bg-transparent">
                         <div class="media-img media--img">
-                            <img src="https://ui-avatars.com/api/?background=random&name=Arden+Smith" alt="avatar">
+                            <img src="https://ui-avatars.com/api/?background=random&name={{ user.name }}" alt="avatar">
                         </div>
                         <div class="media-body">
-                            <h5>Arden Smith</h5>
+                        <h5>{{ user.name }}</h5>
                             <small class="meta d-block lh-20 pb-2">
-                                <span>United States, member since 11 years ago</span>
+                                <span>{{ user.country }}, member since {{ time_ago }}</span>
                             </small>
                             <div class="stats fs-14 fw-medium d-flex align-items-center lh-18">
                                 <span class="text-black pr-2" title="Reputation">224,110</span>
@@ -43,7 +43,7 @@
             <div class="col-lg-12">
                 <ul class="nav nav-tabs generic-tabs generic--tabs generic--tabs-2 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="user-profile-tab" data-toggle="tab" href="#user-profile"
+                        <a class="nav-link active" id="user-profile-tab" data-toggle="tab" href="#user-profile/{{ user.username }}"
                             role="tab" aria-controls="user-profile" aria-selected="true">Profile</a>
                     </li>
                     <li class="nav-item">
@@ -66,10 +66,7 @@
                         aria-labelledby="user-profile-tab">
                         <div class="user-panel-main-bar">
                             <div class="user-panel mb-30px">
-                                <p class="pb-2">I am a programmer. My principal language is C++. I've also done
-                                    commercial work in Java, C, Perl, Python, Javascript and APL. I've also been known
-                                    to dabble in lisp, Haskell, assembler (ARM, x86, amd64) and probably a few other
-                                    languages that haven't left as big a mark.</p>
+                                <p class="pb-2">{{ user.about }}</p>
                                 <p class="pb-2">Programmer at <a href="#"
                                         class="text-color hover-underline">Bloomberg</a>. Posts and commments are my
                                     opinions and are not sponsored or endorsed by my employer.</p>
@@ -78,11 +75,25 @@
                             </div><!-- end user-panel -->
                             <div class="user-panel mb-30px pt-30px border-top border-top-gray">
                                 <ul class="generic-list-item generic-list-item-bullet">
-                                    <li class="pl-3"><a href="#" class="d-inline-block">ardensmith.com</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Facebook</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Twitter</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Instagram</a></li>
-                                </ul>
+                                    {% if user.conn_accounts.github %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.github }}" class="d-inline-block">GitHub</a></li>
+                                    {% endif %}
+                                    {% if user.conn_accounts.stackoverflow %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.stackoverflow }}" class="d-inline-block">Stack Overflow</a></li>
+                                    {% endif %}
+                                    {% if user.conn_accounts.linkedIn %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.linkedIn }}" class="d-inline-block">LinkedIn</a></li>
+                                    {% endif %}
+                                    {% if user.conn_accounts.facebook %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.facebook }}" class="d-inline-block">Facebook</a></li>
+                                    {% endif %}
+                                    {% if user.conn_accounts.twitter %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.twitter }}" class="d-inline-block">Twitter</a></li>
+                                    {% endif %}
+                                    {% if user.conn_accounts.slack %}
+                                        <li class="pl-3"><a href="{{ user.conn_accounts.slack }}" class="d-inline-block">Slack</a></li>
+                                    {% endif %}
+                                </ul>                                
                             </div><!-- end user-panel -->
                             <div class="user-panel mb-30px">
                                 <div class="row">
