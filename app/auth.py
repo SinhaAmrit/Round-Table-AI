@@ -154,7 +154,7 @@ def login():
         If GET: Renders the sign-in page.
     """
     if current_user.is_authenticated:
-        return redirect(redirect(url_for('')))
+        return redirect(redirect(url_for('discussion.dashboard')))
     next_url = request.args.get('next')
     if request.method == 'GET' and next_url:
         session['next_url'] = next_url
