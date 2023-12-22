@@ -6,3 +6,4 @@ requests==2.31.0
 Werkzeug==2.3.8
 psycopg2-binary
 gunicorn
+arrow
