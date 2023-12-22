@@ -13,10 +13,11 @@
                         </div>
                         <div class="user-off-canvas-menu-toggle icon-element icon-element-xs shadow-sm"
                             data-toggle="tooltip" data-placement="top" title="" data-original-title="User menu">
-                                <!-- Signed I User --><i class="la la-user"></i>
+                            {% if current_user.is_authenticated %}<i class="la la-user"></i>
                             <!-- Run scripts for signed-in users -->
-                                <!-- Guest --><i class="la la-bars"></i>
-                            <!-- Run scripts for guests or signed-out users -->                            
+                            {% else %}<i class="la la-bars"></i>
+                            <!-- Run scripts for guests or signed-out users -->
+                            {% endif %}                            
                         </div>
                     </div>
                 </div>
