@@ -133,6 +133,23 @@
         </div>
         <!-- end mobile-search-form -->
         <div class="body-overlay"></div>
+        <!-- flash-messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+        <div class="alert alert-danger alter-dismissable fade show" role="alert"> 
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alter-dismissable fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %} {% endfor %} {% endif %} {% endwith %}
+        <!-- end flash-messages -->
     </header>
     <!-- end nav-area -->
 
@@ -505,7 +522,7 @@
                                 your path to professional
                                 fulfillment.
                             </p>
-                            <a href="/dashboard" class="btn theme-btn">Find a job <i
+                            <a href="/dashboard#jobs" class="btn theme-btn">Find a job <i
                                     class="la la-arrow-right icon ml-1"></i></a>
                         </div>
                         <!-- end card-body -->
