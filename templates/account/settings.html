@@ -68,15 +68,20 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Edit your profile</h3>
                                 </div>
-                                <form method="post" class="pt-35px">
+                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-35px" enctype="multipart/form-data">
+                                    {{ user_profile_form.hidden_tag() }}
                                     <div class="settings-item mb-10px">
                                         <h4 class="fs-14 pb-2 text-gray text-uppercase">Public information</h4>
                                         <div class="divider"><span></span></div>
                                         <div class="row pt-4 align-items-center">
                                             <div class="col-lg-6">
                                                 <div class="edit-profile-photo d-flex flex-wrap align-items-center">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Arden+Smith"
-                                                        alt="user avatar" class="profile-img mr-4">
+                                                    <!--{% if user_profile_form.profile_photo.data %}
+                                                        <img src="{{ current_user.details.profile_photo }}" alt="Profile Picture" class="profile-img mr-4">
+                                                    {% else %}-->
+                                                        <img src="https://ui-avatars.com/api/?background=random&name={{ user_profile_form.full_name.data }}"
+                                                            alt="user avatar" class="profile-img mr-4">
+                                                    <!--{% endif %}-->
                                                     <div>
                                                         <div class="file-upload-wrap file--upload-wrap">
                                                             <input type="file" name="files[]"
@@ -90,17 +95,15 @@
                                             </div><!-- end col-lg-6 -->
                                             <div class="col-lg-6">
                                                 <div class="input-box">
-                                                    <label class="fs-13 text-black lh-20 fw-medium">Display name</label>
+                                                    <label class="fs-13 text-black lh-20 fw-medium">Full name</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control" type="text"
-                                                            name="text" value="Arden Smith">
+                                                        {{ user_profile_form.full_name(class="form-control form--control") }}
                                                     </div>
                                                 </div>
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Location</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control" type="text"
-                                                            name="text" value="United States">
+                                                        {{ user_profile_form.location(class="form-control form--control") }}
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-6 -->
@@ -108,8 +111,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-15 text-black lh-20 fw-medium">About me</label>
                                                     <div class="form-group">
-                                                        <textarea class="form-control form--control user-text-editor"
-                                                            rows="10" cols="40"></textarea>
+                                                        {{ user_profile_form.about_me(class="form-control form--control user-text-editor") }}
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-12 -->
@@ -123,8 +125,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Website link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.website_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-link input-icon"></span>
                                                     </div>
                                                 </div>
@@ -133,30 +134,25 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Twitter link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.twitter_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-twitter input-icon"></span>
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-6 -->
                                             <div class="col-lg-6">
                                                 <div class="input-box">
-                                                    <label class="fs-13 text-black lh-20 fw-medium">Facebook
-                                                        link</label>
+                                                    <label class="fs-13 text-black lh-20 fw-medium">Facebook link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.facebook_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-facebook input-icon"></span>
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-6 -->
                                             <div class="col-lg-6">
                                                 <div class="input-box">
-                                                    <label class="fs-13 text-black lh-20 fw-medium">Instagram
-                                                        link</label>
+                                                    <label class="fs-13 text-black lh-20 fw-medium">Instagram link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.instagram_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-instagram input-icon"></span>
                                                     </div>
                                                 </div>
@@ -165,8 +161,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Youtube link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.youtube_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-youtube input-icon"></span>
                                                     </div>
                                                 </div>
@@ -175,8 +170,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Vimeo link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-vimeo input-icon"></span>
                                                     </div>
                                                 </div>
@@ -185,15 +179,14 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">GitHub link</label>
                                                     <div class="form-group">
-                                                        <input class="form-control form--control pl-40px" type="text"
-                                                            name="text">
+                                                        {{ user_profile_form.github_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-github input-icon"></span>
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-12 -->
                                             <div class="col-lg-12">
                                                 <div class="submit-btn-box pt-3">
-                                                    <button class="btn theme-btn" type="button">Save changes</button>
+                                                    {{ user_profile_form.submit(class="btn theme-btn", value="Save Changes") }}
                                                 </div>
                                             </div><!-- end col-lg-12 -->
                                         </div><!-- end row -->
@@ -209,22 +202,29 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Change password</h3>
                                 </div>
-                                <form method="post" class="pt-20px">
+                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
+                                    {{ change_password_form.hidden_tag() }}
                                     <div class="settings-item mb-30px">
                                         <div class="form-group">
                                             <label class="fs-13 text-black lh-20 fw-medium">Current Password</label>
-                                            <input class="form-control form--control password-field" type="password"
-                                                name="password" placeholder="Current password">
+                                            {{ change_password_form.current_password(class="form-control form--control password-field", 
+                                            placeholder="Current password") }}
                                         </div>
                                         <div class="form-group">
                                             <label class="fs-13 text-black lh-20 fw-medium">New Password</label>
-                                            <input class="form-control form--control password-field" type="password"
-                                                name="password" placeholder="New password">
+                                            {{ change_password_form.new_password(class="form-control form--control password-field", placeholder="New password") }}
+                                            <!-- Display validation errors if any -->
+                                            {% for error in change_password_form.new_password.errors %}
+                                                <p class="text-danger">{{ error }}</p>
+                                            {% endfor %}
                                         </div>
                                         <div class="form-group">
-                                            <label class="fs-13 text-black lh-20 fw-medium">New Password (again)</label>
-                                            <input class="form-control form--control password-field" type="password"
-                                                name="password" placeholder="New password again">
+                                            <label class="fs-13 text-black lh-20 fw-medium">Confirm Password</label>
+                                            {{ change_password_form.confirm_password(class="form-control form--control password-field", placeholder="Confirm password") }}
+                                            <!-- Display validation errors if any -->
+                                            {% for error in change_password_form.confirm_password.errors %}
+                                                <p class="text-danger">{{ error }}</p>
+                                            {% endfor %}
                                             <p class="fs-14 lh-18 py-2">Passwords must contain at least eight
                                                 characters, including at least 1 letter and 1 number.</p>
                                             <button class="btn theme-btn-outline theme-btn-outline-gray toggle-password"
@@ -247,7 +247,7 @@
                                             </button>
                                         </div>
                                         <div class="submit-btn-box pt-3">
-                                            <button class="btn theme-btn" type="button">Change Password</button>
+                                            {{ change_password_form.submit(class="btn theme-btn", value="Change Password") }}
                                         </div>
                                     </div><!-- end settings-item -->
                                     <div class="border border-gray p-4">
@@ -268,14 +268,14 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Email Settings</h3>
                                 </div>
-                                <form method="post" class="pt-20px">
+                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
+                                    {{ email_settings_form.hidden_tag() }}
                                     <div class="settings-item mb-30px border-bottom border-bottom-gray pb-30px">
                                         <label class="fs-13 text-black lh-20 fw-medium">Email Address</label>
                                         <div class="input-group">
-                                            <input class="form-control form--control" type="email" name="email"
-                                                value="ardensmith81@gmail.com">
+                                            {{ email_settings_form.email(class="form-control form--control") }}
                                             <div class="input-group-append">
-                                                <button class="btn theme-btn" type="button">Save</button>
+                                                {{ email_settings_form.submit(class="btn theme-btn") }}
                                             </div>
                                         </div>
                                     </div><!-- end settings-item -->
@@ -444,7 +444,7 @@
                                     <h3 class="fs-17">Privacy Settings</h3>
                                     <p class="fs-13">Select who may see your profile details</p>
                                 </div>
-                                <form method="post" class="pt-20px">
+                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
                                     <div class="settings-item">
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Profile Picture</label>
