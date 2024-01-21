@@ -34,12 +34,14 @@
                     </div><!-- end media -->
                 </div><!-- end hero-content -->
             </div><!-- end col-lg-8 -->
+            {% if user.id == current_user.id %}
             <div class="col-lg-4">
                 <div class="hero-btn-box text-right py-3">
                     <a href="/settings" class="btn theme-btn theme-btn-outline theme-btn-outline-gray"><i
                             class="la la-gear mr-1"></i> Edit Profile</a>
                 </div>
-            </div><!-- end col-lg-4 -->
+            </div>
+            {% endif %}<!-- end col-lg-4 -->
             <div class="col-lg-12">
                 <ul class="nav nav-tabs generic-tabs generic--tabs generic--tabs-2 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
