@@ -34,11 +34,13 @@ def create_app():
     from .auth import auth
     from .discussion import disc
     from .account import acc
+    from .forms import form
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(disc, url_prefix='/')
     app.register_blueprint(acc, url_prefix='/')
+    app.register_blueprint(form, url_prefix='/')
 
     # Import User model
     from .models import User
