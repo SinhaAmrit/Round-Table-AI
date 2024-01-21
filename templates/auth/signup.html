@@ -3,7 +3,8 @@
 <!--Start Sign Up area-->
 <section class="sign-up-area pt-80px pb-80px position-relative">
     <div class="container">
-        <form action="{{ url_for('auth.sign_up') }}" method="POST" class="card card-item">        
+        <form action="{{ url_for('auth.sign_up') }}" method="POST" class="card card-item">
+            {{ form.hidden_tag() }}      
             <div class="card-body row p-0">
                 <div class="col-lg-6">
                     <div
@@ -67,25 +68,23 @@
                             <div class="divider"><span></span></div>
                         </div>
                         <div class="form-group">
-                            <label class="fs-14 text-black fw-medium lh-18">Display name</label>
-                            <input type="text" name="name" class="form-control form--control"
-                                placeholder="Enter name">
+                            <label class="fs-14 text-black fw-medium lh-18">Full Name</label>
+                            {{ form.name(class="form-control form--control", placeholder="Enter name") }}
                         </div><!-- end form-group -->
                         <div class="form-group">
                             <label class="fs-14 text-black fw-medium lh-18">Username</label>
-                            <input type="text" name="username" class="form-control form--control"
-                                placeholder="Username">
+                            {{ form.username(class="form-control form--control", placeholder="Username") }}
                         </div><!-- end form-group -->
                         <div class="form-group">
                             <label class="fs-14 text-black fw-medium lh-18">Email</label>
-                            <input type="email" name="email" class="form-control form--control"
-                                placeholder="Email address">
+                            {{ form.email(class="form-control form--control", 
+                            placeholder="Email address") }}
                         </div><!-- end form-group -->
                         <div class="form-group">
                             <label class="fs-14 text-black fw-medium lh-18">Password</label>
                             <div class="input-group mb-1">
-                                <input class="form-control form--control password-field" type="password" name="password"
-                                    placeholder="Password">
+                                {{ form.password(class="form-control form--control password-field", 
+                                placeholder="Password") }}
                                 <div class="input-group-append">
                                     <button class="btn theme-btn-outline theme-btn-outline-gray toggle-password"
                                         type="button">

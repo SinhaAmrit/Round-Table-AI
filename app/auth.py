@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
+from .forms import SignupForm, SigninForm
 from . import db, login_manager
 from datetime import datetime
 from flask_login import login_user, login_required, logout_user, current_user
@@ -9,6 +9,7 @@ import re
 # Create a Blueprint named 'auth'
 auth = Blueprint('auth', __name__)
 
+#========================================================================================================
                                 # Sign Up
 #========================================================================================================
 @auth.route('/signup', methods=['GET', 'POST'])
@@ -29,45 +30,52 @@ def sign_up():
     if current_user.is_authenticated:
         return redirect(redirect(url_for('views.home')))
     next_url = request.args.get('next')
+    form = SignupForm()
     if request.method == 'GET' and next_url:
         session['next_url'] = next_url
 
     if request.method == 'POST':
-        print("Handling POST request")
-        name = request.form.get('name')
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        opt_in = 'opt-in' in request.form
-        if not (name and username and email and password):
+
+        if not form.validate_on_submit():
             flash('Enter all fields.', category='error')
+
         else:
-            if User.query.filter_by(email=email).first():
+            if User.query.filter_by(email=form.email.data).first():
                 flash('Email already exists!', category='error')
-            elif User.query.filter_by(username=username).first():
+            elif User.query.filter_by(username=form.username.data).first():
                 flash("Username already exists!", category='error')
-            elif not is_valid_username(username)[0]:
-                flash(is_valid_username(username)[1], category='error')
-            elif not is_strong_password(password)[0]:
-                flash(is_strong_password(password)[1], category='error')
+            elif not is_valid_username(form.username.data)[0]:
+                flash(is_valid_username(form.username.data)[1], category='error')
+            elif not is_strong_password(form.password.data)[0]:
+                flash(is_strong_password(form.password.data)[1], category='error')
 
             else:
                 # condition passed, create a new user
-                hashed_password = generate_password_hash(password, method='sha256')
-                new_user = User(email=email, name=name, username=username, password_hash=hashed_password)
+                new_user = User(
+                    email=form.email.data, 
+                    name=form.name.data, 
+                    username=form.username.data, 
+                    password=form.password.data)
+                
+                try:
+                    db.session.add(new_user)
+                    db.session.commit()
 
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(new_user, remember=False)
-                flash('Account created!', category='success')
-                next_url = session.pop('next_url', None)
-                if not next_url:
-                    return redirect('/dashboard')
-                else:
-                    return redirect(url_for(next_url))
-
+                    login_user(new_user, remember=False)
+                    flash('Account created!', category='success')
+                    next_url = session.pop('next_url', None)
+                    if not next_url:
+                        return redirect('/dashboard')
+                    else:
+                        return redirect(url_for(next_url))
+                    
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"An error occurred: {e}")
+                    flash("Error during user registration", category="error")
+                    
         return redirect(url_for('auth.sign_up'))
-    return render_template("auth/signup.html", title="Sign Up")
+    return render_template("auth/signup.html", title="Sign Up", form=form)
 #========================================================================================================
 def is_valid_username(username):
     """
@@ -155,49 +163,50 @@ def login():
     """
     if current_user.is_authenticated:
         return redirect(redirect(url_for('discussion.dashboard')))
+    
     next_url = request.args.get('next')
+
     if request.method == 'GET' and next_url:
         session['next_url'] = next_url
+
+    form = SigninForm()
     is_error_occur = False
+
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        remember = request.form.get('rememberMe')
-        print("data accepted from form successfully")
-        # Check if the identifier is an email
-        if not (email and password):
+
+        # Check if the form is valid
+        if not form.validate_on_submit():
             flash('Enter email and password, try again.', category='error')
             is_error_occur = True
         else:
-            user = User.query.filter_by(email=email).first()
-        # If the identifier is not an email, check if it's a username
-        if not user:
-            user = User.query.filter_by(username=email).first()
+            user = User.query.filter_by(email=form.email.data).first()
 
-        if user:
+            if user:
             # User found, check the password
-            print("User found")
-            if check_password_hash(user.password_hash, password):
-                login_user(user, remember=remember)
-                next_url = session.pop('next_url', None)
-                if not next_url:
-                    return redirect('/dashboard')
-                else:
-                    return redirect(url_for(next_url))
+                print("User found")
+                if user.check_password(form.password.data):
+                    login_user(user)
+                    user.details.active = True
+                    db.session.commit()
+                    next_url = session.pop('next_url', None)
+                    if not next_url:
+                        return redirect('/dashboard')
+                    else:
+                        return redirect(url_for(next_url))
                 
+                else:
+                    flash('Incorrect password, try again.', category='error')
+                    is_error_occur = True
             else:
-                flash('Incorrect password, try again.', category='error')
+                print("User not found")
+                flash('User does not exist.', category='error')
                 is_error_occur = True
-        else:
-            print("User not found")
-            flash('User does not exist.', category='error')
-            is_error_occur = True
 
     if is_error_occur:
         return redirect(url_for('auth.login'))
     
     print("Handling GET")
-    return render_template("auth/signin.html", title="Sign In")
+    return render_template("auth/signin.html", title="Sign In", form=form)
 #========================================================================================================
                                 # Recover Password
 #========================================================================================================
@@ -210,7 +219,7 @@ def recover_password():
         Renders the password recovery page.
     """
     if request.method == 'POST':
-        email = request.form.get('email')
+        pass
         
 
     return render_template("auth/recover-password.html", title="Recover Password")
@@ -229,11 +238,25 @@ def sign_out():
     Returns:
         Redirects to the login page.
     """
-    current_user.last_seen = datetime.utcnow()
-    db.session.commit()
-    logout_user()
-    return redirect(url_for('views.home'))
-    
+    try:
+        # Update last_seen and set active to False
+        current_user.details.last_seen = datetime.utcnow()
+        current_user.details.active = False
+
+        # Commit the changes
+        db.session.commit()
+
+        # Logout the user
+        logout_user()
+
+        flash('You have been logged out successfully!', 'success')
+        return redirect(url_for('views.home'))
+
+    except Exception as e:
+        # If an error occurs, rollback changes and log the error
+        db.session.rollback()
+        flash(f'Error during logout: {str(e)}', 'error')
+        return redirect(url_for('views.home'))
 #========================================================================================================
                                 # Unauthorized-Callback
 #========================================================================================================
@@ -259,5 +282,4 @@ def unauthorized_callback():
     flash('Sign in first to access this page!', category='error')
     # Redirects the user to the login page while preserving the originally requested page (if available)
     return redirect(url_for('auth.login', next=request.endpoint))
-
 #========================================================================================================

@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Discussion
-from werkzeug.utils import secure_filename
-from . import db
-from datetime import datetime
 from flask_login import login_required, current_user
+from . import db
+from .models import Question, Image
+from .forms import AskQuestionForm
+import os
+from werkzeug.utils import secure_filename
 
 
 disc = Blueprint('discussion', __name__)
@@ -17,38 +18,61 @@ def question(slug):
     if request.method == 'POST':
         pass
     else:
-        discussion = Discussion.query.filter_by(slug=slug).first()
+        discussion = Question.query.filter_by(slug=slug).first()
 
         if discussion:
-            disc_details = discussion[:] #parameters that want to pass to frontend
-            return render_template("discussion/question.html", title="Questions", discussion=disc_details)
+            return render_template("discussion/question.html", title="Questions", discussion=discussion)
         else:
             flash('Discussion not found', 'error')
-            return redirect(url_for('discussions.questions'))
+            return redirect(url_for('discussion.question', slug=slug))
 #========================================================================================================
                                 # ASK-QUESTION
 #========================================================================================================
+
 @disc.route('/ask-question', methods=['GET', 'POST'])
 @login_required
 def ask_question():
-    print("Entering ask_question function")
+    form = AskQuestionForm()
     if request.method == 'POST':
-        print("Entering POST Method")
-        title = request.form.get('question-title')
-        details = request.form.get('text')
+        if form.validate_on_submit():
+            # Process the form data
+            question = Question(
+                title=form.question_title.data,
+                tags=form.tags,
+                category=form.category.data,
+                description=form.details.data,
+                slug=generate_slug(form.question_title.data),
+                user=current_user
+            )
+            notified_me=form.notified_me.data
+            you_agree=form.you_agree.data
 
-        if title and details:
-            new_discussion = Discussion(title=title, description=details, slug=generate_slug(title))
+            # Save the image if provided
+            if form.image.data:
+                # Create the directory structure if it doesn't exist
+                upload_folder = os.path.join(disc.config['UPLOAD_FOLDER'], 'question', 'image', str(question.id))
+                os.makedirs(upload_folder, exist_ok=True)
 
-            db.session.add(new_discussion)
+                filename = secure_filename(form.image.data.filename)
+                image_path = os.path.join(upload_folder, filename)
+                form.image.data.save(image_path)
+
+                # Assuming you have an Image model with an id field
+                image = Image(filename=filename)
+                question.images.append(image)
+
+
+            # Add the question to the database
+            db.session.add(question)
             db.session.commit()
 
             flash('Question uploaded successfully', category='success')
-            return redirect(url_for('discussion.question', slug=new_discussion.slug))
+            return redirect(url_for('discussion.question', slug=question.slug))
         else:
-            flash('Title and description are required', 'error')
+            flash('Error submitting the question. Please check your inputs.', 'error')
 
-    return render_template("discussion/ask-question.html", title="Ask Question")
+    return render_template("discussion/ask-question.html", title="Ask Question", form=form)
+
 
 def generate_slug(title):
     # Convert to lowercase, replace spaces with hyphens, and take the first 50 characters
@@ -69,6 +93,7 @@ def category():
 #========================================================================================================
                                 # DASHBOARD
 #========================================================================================================
+@disc.route("/")
 @disc.route("/dashboard")
 def dashboard():
     # Sample data, replace it with your actual data retrieval logic
@@ -88,20 +113,8 @@ def dashboard():
                             selected_category=selected_category, selected_tag=selected_tag)
 
 # Add helper functions to retrieve data and filter discussions
-def get_discussions():
+def get_questions():
     # Implement your logic to retrieve discussions from the database or any other source
-    pass
-
-def get_categories():
-    # Implement your logic to retrieve categories from the database or any other source
-    pass
-
-def get_tags():
-    # Implement your logic to retrieve tags from the database or any other source
-    pass
-
-def filter_discussions(discussions, category, tag):
-    # Implement your logic to filter discussions based on the selected category and tag
     pass
 
 #========================================================================================================

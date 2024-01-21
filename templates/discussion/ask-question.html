@@ -107,14 +107,15 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card card-item">
-                    <form action="{{ url_for('discussion.ask_question') }}" method="post" class="card-body">
+                    <form action="{{ url_for('discussion.ask_question', slug=discussion.slug) }}" method="post" class="card-body">
+                        {{ form.hidden_tag() }}
                         <div class="input-box">
                             <label class="fs-14 text-black fw-medium mb-0">Question Title</label>
                             <p class="fs-13 pb-3 lh-20">Be specific and imagine you’re asking a question to another
                                 person</p>
                             <div class="form-group">
-                                <input class="form-control form--control" type="text" name="question-title"
-                                    placeholder="e.g. Is there an R function for finding the index of an element in a vector?">
+                                {{ form.question_title(class="form-control form--control", 
+                                placeholder="e.g. Is there an R function for finding the index of an element in a vector?") }}
                             </div>
                         </div><!-- end input-box -->
                         <div class="input-box">
@@ -158,8 +159,8 @@
                                 </div><!-- end generic-popover -->
                             </div>
                             <div class="form-group">
-                                <input class="input-tags input--tags" type="text" name="tags"
-                                    placeholder="e.g. javascript">
+                                {{ form.tags(class="input-tags input--tags", 
+                                placeholder="e.g. javascript") }}
                             </div>
                         </div><!-- end input-box -->
                         <div class="input-box">
@@ -167,8 +168,9 @@
                             <p class="fs-13 pb-3 lh-20">Please choose the appropriate section so the question can be
                                 searched easily.</p>
                             <div class="form-group">
-                                <select class="select-container select--container" data-placeholder="Select a Category">
-                                    <option selected value="">Select a Category</option>
+                                {{ form.category(class="select-container select--container", 
+                                data_placeholder="Select a Category") }}
+                                    <!--<option selected value="">Select a Category</option>
                                     <option value="1">JavaScript</option>
                                     <option value="2">Java</option>
                                     <option value="3">Python</option>
@@ -177,7 +179,7 @@
                                     <option value="6">SQL</option>
                                     <option value="7">MongoDB</option>
                                     <option value="8">PHP</option>
-                                </select>
+                                </select>-->
                             </div>
                         </div><!-- end input-box -->
                         <div class="input-box">
@@ -185,8 +187,7 @@
                             <p class="fs-13 pb-3 lh-20">Include all the information someone would need to answer
                                 your question</p>
                             <div class="form-group">
-                                <textarea class="form-control form--control user-text-editor" rows="10"
-                                    cols="40"></textarea>
+                                {{ form.details(class="form-control form--control user-text-editor", rows=10, cols=40) }}
                                 <div class="d-flex align-items-center pt-2">
                                     <div class="mr-3">
                                         ``` <code class="badge bg-gray border border-gray text-gray">code</code> ```
@@ -201,7 +202,7 @@
                             <label class="fs-14 text-black fw-medium">Image</label>
                             <div class="form-group">
                                 <div class="file-upload-wrap file-upload-layout-2">
-                                    <input type="file" name="files[]" class="file-upload-input" multiple>
+                                    {{ form.image(class="file-upload-input", multiple=true) }}
                                     <span class="file-upload-text d-flex align-items-center justify-content-center"><i
                                             class="la la-cloud-upload mr-2 fs-24"></i>Drop files here or click to
                                         upload.</span>
@@ -211,12 +212,12 @@
                         <div class="input-box pt-2">
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox fs-13 mb-1">
-                                    <input type="checkbox" class="custom-control-input" id="notifiedMe" checked>
+                                    {{ form.notified_me(class="custom-control-input", id="notifiedMe", checked=true) }}
                                     <label class="custom-control-label custom--control-label" for="notifiedMe">Get
                                         notified by email when someone answers this question.</label>
                                 </div>
                                 <div class="custom-control custom-checkbox fs-13">
-                                    <input type="checkbox" class="custom-control-input" id="youAgreeCheckBox" checked>
+                                    {{ form.you_agree(class="custom-control-input", id="youAgreeCheckBox", checked=true) }}
                                     <label class="custom-control-label custom--control-label" for="youAgreeCheckBox">By
                                         asking your question, you agree to the <a href="/privacy-policy"
                                             class="text-color hover-underline">Privacy

@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <div class="col-lg-2">
                 <div class="logo-box">
-                    <a href="/" class="logo"><img src="/static/images/logo.png" width="200px"
+                    <a href="/home" class="logo"><img src="/static/images/logo.png" width="200px"
                             alt="logo"></a>
                     <div class="user-action">
                         <div class="search-menu-toggle icon-element icon-element-xs shadow-sm mr-1"
@@ -13,10 +13,11 @@
                         </div>
                         <div class="user-off-canvas-menu-toggle icon-element icon-element-xs shadow-sm"
                             data-toggle="tooltip" data-placement="top" title="" data-original-title="User menu">
-                                <!-- Signed I User --><i class="la la-user"></i>
+                            {% if current_user.is_authenticated %}<i class="la la-user"></i>
                             <!-- Run scripts for signed-in users -->
-                                <!-- Guest --><i class="la la-bars"></i>
-                            <!-- Run scripts for guests or signed-out users -->                            
+                            {% else %}<i class="la la-bars"></i>
+                            <!-- Run scripts for guests or signed-out users -->
+                            {% endif %}                            
                         </div>
                     </div>
                 </div>
@@ -154,7 +155,7 @@
                                                 class="la la-user-plus mr-2"></i>Referrals</a>
                                         <a class="dropdown-item" href="/settings"><i
                                                 class="la la-gear mr-2"></i>Settings</a>
-                                        <a class="dropdown-item" href="/"><i class="la la-power-off mr-2"></i>Sign
+                                        <a class="dropdown-item" href="/signout"><i class="la la-power-off mr-2"></i>Sign
                                             out</a>
                                     </div>
                                 </div>
