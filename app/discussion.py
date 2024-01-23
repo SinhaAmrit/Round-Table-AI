@@ -13,18 +13,15 @@ disc = Blueprint('discussion', __name__)
 #========================================================================================================
                                 # QUESTION
 #========================================================================================================
-@disc.route('/question/<slug>', methods=['GET', 'POST'])
+@disc.route('/question/<slug>', methods=['GET'])
 def question(slug):
-    if request.method == 'POST':
-        pass
-    else:
-        discussion = Question.query.filter_by(slug=slug).first()
+        question = Question.query.filter_by(slug=slug).first()
 
-        if discussion:
-            return render_template("discussion/question.html", title="Questions", discussion=discussion)
+        if question:
+            return render_template("discussion/question.html", title="Questions", question=question)
         else:
             flash('Discussion not found', 'error')
-            return redirect(url_for('discussion.question', slug=slug))
+            return redirect(url_for('discussion.dashboard'))
 #========================================================================================================
                                 # ASK-QUESTION
 #========================================================================================================
@@ -96,21 +93,21 @@ def category():
 @disc.route("/")
 @disc.route("/dashboard")
 def dashboard():
-    # Sample data, replace it with your actual data retrieval logic
-    discussions = get_discussions()
-    categories = get_categories()
-    tags = get_tags()
+    # # Sample data, replace it with your actual data retrieval logic
+    # discussions = get_discussions()
+    # categories = get_categories()
+    # tags = get_tags()
 
-    # Retrieve filters from query parameters
-    selected_category = request.args.get('category', 'All')
-    selected_tag = request.args.get('tag', 'All')
+    # # Retrieve filters from query parameters
+    # selected_category = request.args.get('category', 'All')
+    # selected_tag = request.args.get('tag', 'All')
 
-    # Apply filters
-    filtered_discussions = filter_discussions(discussions, selected_category, selected_tag)
+    # # Apply filters
+    # filtered_discussions = filter_discussions(discussions, selected_category, selected_tag)
 
-    return render_template("discussion/dashboard.html", title="Dashboard",
-                            discussions=filtered_discussions, categories=categories, tags=tags, 
-                            selected_category=selected_category, selected_tag=selected_tag)
+    return render_template("discussion/dashboard.html", title="Dashboard")
+    #                         discussions=filtered_discussions, categories=categories, tags=tags, 
+    #                         selected_category=selected_category, selected_tag=selected_tag)
 
 # Add helper functions to retrieve data and filter discussions
 def get_questions():
