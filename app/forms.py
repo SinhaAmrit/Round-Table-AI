@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, validators, PasswordField, SubmitField, RadioField, SelectField, BooleanField, validators
 from flask_wtf.file import FileField, FileAllowed, MultipleFileField
@@ -39,17 +38,17 @@ class ChangePasswordForm(FlaskForm):
 #========================================================================================================
 class UserProfileForm(FlaskForm):
 
-    full_name = StringField('Full Name', [validators.DataRequired()])
-    location = StringField('Location', [validators.DataRequired()])
+    full_name = StringField('Full Name')
+    location = StringField('Location')
     about_me = TextAreaField('About Me')
 
-    website_link = StringField('Website Link', [validators.URL()])
-    twitter_link = StringField('Twitter Link', [validators.URL()])
-    facebook_link = StringField('Facebook Link', [validators.URL()])
-    instagram_link = StringField('Instagram Link', [validators.URL()])
-    youtube_link = StringField('Youtube Link', [validators.URL()])
-    vimeo_link = StringField('Vimeo Link', [validators.URL()])
-    github_link = StringField('GitHub Link', [validators.URL()])
+    website_link = StringField('Website Link', [validators.Optional(), validators.URL()])
+    twitter_link = StringField('Twitter Link', [validators.Optional(), validators.URL()])
+    facebook_link = StringField('Facebook Link', [validators.Optional(), validators.URL()])
+    instagram_link = StringField('Instagram Link', [validators.Optional(), validators.URL()])
+    youtube_link = StringField('Youtube Link', [validators.Optional(), validators.URL()])
+    vimeo_link = StringField('Vimeo Link', [validators.Optional(), validators.URL()])
+    github_link = StringField('GitHub Link', [validators.Optional(), validators.URL()])
 
     profile_photo = StringField('Profile Photo')
 
@@ -103,8 +102,15 @@ def validate_tags(form, field):
 class AskQuestionForm(FlaskForm):
     question_title = StringField('Question Title', [validators.DataRequired()])
     tags = StringField('Tags', validators=[validate_tags])
-    category = SelectField('Category', choices=[('1', 'JavaScript'), ('2', 'Java'), ('3', 'Python'), ('4', 'C/C++'), ('5', 'JQuery'), ('6', 'SQL'), ('7', 'MongoDB'), ('8', 'PHP')], coerce=int)
+    category = SelectField('Category', choices=[('JavaScript', 'JavaScript'), ('Java', 'Java'), ('Python', 'Python'), ('C/C++', 'C/C++'), ('JQuery', 'JQuery'), ('SQL', 'SQL'), ('MongoDB', 'MongoDB'), ('PHP', 'PHP')], coerce=str)
     details = TextAreaField('Details', [validators.DataRequired()])
     image = MultipleFileField('Image')
     notified_me = BooleanField('Get notified by email when someone answers this question.', default=True)
     you_agree = BooleanField('By asking your question, you agree to the Privacy Policy.', default=True)
+#========================================================================================================
+                                # Ask-Question Form
+#========================================================================================================
+class AnswerForm(FlaskForm):
+    details = TextAreaField('Details', [validators.DataRequired()])
+    image = MultipleFileField('Image')
+#======================================================================================================== 
