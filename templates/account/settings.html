@@ -79,7 +79,7 @@
                                                     <!--{% if user_profile_form.profile_photo.data %}
                                                         <img src="{{ current_user.details.profile_photo }}" alt="Profile Picture" class="profile-img mr-4">
                                                     {% else %}-->
-                                                        <img src="https://ui-avatars.com/api/?background=random&name={{ user_profile_form.full_name.data }}"
+                                                        <img src="https://ui-avatars.com/api/?background=random&name={{ user['full_name'] }}"
                                                             alt="user avatar" class="profile-img mr-4">
                                                     <!--{% endif %}-->
                                                     <div>
@@ -97,13 +97,21 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Full name</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.full_name(class="form-control form--control") }}
+                                                        {% if user['full_name'] %}
+                                                            {{ user_profile_form.full_name(class="form-control form--control", placeholder=user['full_name']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.full_name(class="form-control form--control", placeholder='Full name') }}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Location</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.location(class="form-control form--control") }}
+                                                        {% if user['location'] %}
+                                                            {{ user_profile_form.location(class="form-control form--control", placeholder=user['location']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.location(class="form-control form--control", placeholder='Location') }}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-6 -->
@@ -111,7 +119,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-15 text-black lh-20 fw-medium">About me</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.about_me(class="form-control form--control user-text-editor") }}
+                                                        {% if user['about_me'] %}
+                                                            {{ user_profile_form.about_me(class="form-control form--control user-text-editor", placeholder=user['about_me']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.about_me(class="form-control form--control user-text-editor", placeholder='About me') }}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-12 -->
@@ -125,7 +137,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Website link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.website_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['website_link'] %}
+                                                            {{ user_profile_form.website_link(class="form-control form--control pl-40px", placeholder=user['website_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.website_link(class="form-control form--control pl-40px", placeholder='Website') }}
+                                                        {% endif %}
                                                         <span class="la la-link input-icon"></span>
                                                     </div>
                                                 </div>
@@ -134,7 +150,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Twitter link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.twitter_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['twitter_link'] %}
+                                                            {{ user_profile_form.twitter_link(class="form-control form--control pl-40px", placeholder=user['twitter_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.twitter_link(class="form-control form--control pl-40px", placeholder='Twitter') }}
+                                                        {% endif %}
                                                         <span class="la la-twitter input-icon"></span>
                                                     </div>
                                                 </div>
@@ -143,7 +163,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Facebook link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.facebook_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['facebook_link'] %}
+                                                            {{ user_profile_form.facebook_link(class="form-control form--control pl-40px", placeholder=user['facebook_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.facebook_link(class="form-control form--control pl-40px", placeholder='Facebook') }}
+                                                        {% endif %}
                                                         <span class="la la-facebook input-icon"></span>
                                                     </div>
                                                 </div>
@@ -152,7 +176,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Instagram link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.instagram_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['instagram_link'] %}
+                                                            {{ user_profile_form.instagram_link(class="form-control form--control pl-40px", placeholder=user['instagram_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.instagram_link(class="form-control form--control pl-40px", placeholder='Instagram') }}
+                                                        {% endif %}
                                                         <span class="la la-instagram input-icon"></span>
                                                     </div>
                                                 </div>
@@ -161,7 +189,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Youtube link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.youtube_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['youtube_link'] %}
+                                                            {{ user_profile_form.youtube_link(class="form-control form--control pl-40px", placeholder=user['youtube_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.youtube_link(class="form-control form--control pl-40px", placeholder='Youtube') }}
+                                                        {% endif %}
                                                         <span class="la la-youtube input-icon"></span>
                                                     </div>
                                                 </div>
@@ -170,7 +202,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Vimeo link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['vimeo_link'] %}
+                                                            {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px", placeholder=user['vimeo_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px", placeholder='Vimeo') }}
+                                                        {% endif %}
                                                         <span class="la la-vimeo input-icon"></span>
                                                     </div>
                                                 </div>
@@ -179,7 +215,11 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">GitHub link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.github_link(class="form-control form--control pl-40px") }}
+                                                        {% if user['github_link'] %}
+                                                            {{ user_profile_form.github_link(class="form-control form--control pl-40px", placeholder=user['github_link']) }}
+                                                        {% else %}
+                                                            {{ user_profile_form.github_link(class="form-control form--control pl-40px", placeholder='Github') }}
+                                                        {% endif %}
                                                         <span class="la la-github input-icon"></span>
                                                     </div>
                                                 </div>
