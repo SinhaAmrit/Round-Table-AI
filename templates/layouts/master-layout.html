@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} | RoundTable</title>
     <!-- Favicon -->
-    <link rel="icon" sizes="16x16" href="static/images/favicon.png" />
+    <link rel="icon" sizes="16x16" href="{{ url_for('static', filename='images/favicon.png') }}" />
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
@@ -15,14 +15,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- inject:css -->
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/css/line-awesome.css">
-    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="static/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="static/css/jquery-te-1.4.0.css">
-    <link rel="stylesheet" href="static/css/upvotejs.min.css">
-    <link rel="stylesheet" href="static/css/selectize.css">
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/line-awesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-te-1.4.0.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upvotejs.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selectize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
@@ -39,16 +39,16 @@
 </body>
 
 <!-- script files -->
-<script src="static/js/jquery-3.4.1.min.js"></script>
-<script src="static/js/bootstrap.bundle.min.js"></script>
-<script src="static/js/owl.carousel.min.js"></script>
-<script src="static/js/jquery-te-1.4.0.min.js"></script>
-<script src="static/js/upvote.vanilla.js"></script>
-<script src="static/js/upvote-script.js"></script>
-<script src="static/js/selectize.min.js"></script>
-<script src="static/js/jquery.multi-file.min.js"></script>
-<script src="static/js/main.js"></script>
-<script type="text/javascript" src="https://unpkg.com/sheryjs/dist/Shery.js"></script>
-<script src="static/js/anim.js"></script>
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-te-1.4.0.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/upvote.vanilla.js') }}"></script>
+<script src="{{ url_for('static', filename='js/upvote-script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.multi-file.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="text/javascript" src="https://unpkg.com/sheryjs/dist/Shery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/anim.js') }}"></script>
 
 </html>
