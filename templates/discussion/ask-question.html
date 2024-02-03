@@ -107,7 +107,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card card-item">
-                    <form action="{{ url_for('discussion.ask_question', slug=discussion.slug) }}" method="post" class="card-body">
+                    <form action="{{ url_for('discussion.ask_question') }}" method="post" class="card-body">
                         {{ form.hidden_tag() }}
                         <div class="input-box">
                             <label class="fs-14 text-black fw-medium mb-0">Question Title</label>

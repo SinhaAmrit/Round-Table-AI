@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
-from .models import Question, Image
-from .forms import AskQuestionForm
+from .models import Question, Answer, Image
+from .forms import AskQuestionForm, AnswerForm
 import os
 from werkzeug.utils import secure_filename
-
+from datetime import datetime
+import humanize
 
 disc = Blueprint('discussion', __name__)
 
@@ -13,15 +14,63 @@ disc = Blueprint('discussion', __name__)
 #========================================================================================================
                                 # QUESTION
 #========================================================================================================
-@disc.route('/question/<slug>', methods=['GET'])
+@disc.route('/question/<slug>', methods=['GET', 'POST'])
 def question(slug):
-        question = Question.query.filter_by(slug=slug).first()
+        if slug:
+            que = Question.query.filter_by(slug=slug).first()
 
-        if question:
-            return render_template("discussion/question.html", title="Questions", question=question)
-        else:
-            flash('Discussion not found', 'error')
-            return redirect(url_for('discussion.dashboard'))
+            if que and not que.deleted_at:
+                question = {'title' : que.title,
+                        'body': que.body,
+                        'category': que.category,
+                        'slug': que.slug,
+                        'views': que.views,
+                        'vote': que.vote,
+                        'archived': que.archived,
+                        'asked_ago': humanize.naturaltime(datetime.utcnow() - que.created_at),
+                        'edited' : que.updated_at,
+                        'archived': que.archived,
+                        'tags':que.tags,
+                        'username': que.user.username,
+                        'name': que.user.name,
+                        'reputation': que.user.details.reputation,
+                        'gold':que.user.details.gold,
+                        'silver':que.user.details.silver,
+                        'bronze':que.user.details.bronze
+                    }
+                answers = []
+                for ans in que.answers:
+                    answers.append({
+                        'username': ans.user.username,
+                        'name': ans.user.name,
+                        'reputation': ans.user.details.reputation,
+                        'gold': ans.user.details.gold,
+                        'silver': ans.user.details.silver,
+                        'bronze': ans.user.details.bronze,
+                        'body': ans.body,
+                        'ans_ago': humanize.naturaltime(datetime.utcnow() - ans.created_at),
+                        'edited': ans.updated_at,
+                        'vote': ans.vote
+                    })
+                
+                answers = sorted(answers, key=lambda x: x['vote'], reverse=True)
+                
+                form = AnswerForm()
+                if request.method == 'POST' and form.validate_on_submit():
+                    ans = Answer(
+                        body = form.details.data,
+                        user = current_user,
+                        question = que
+                    )
+                    db.session.add(ans)
+                    db.session.commit()
+                    ans = None
+
+                return render_template("discussion/question.html", question=question, answers=answers,answer_form=form, title="Questions")
+            else:
+                flash('Discussion not found', 'error')
+
+        return redirect(url_for('discussion.dashboard'))
 #========================================================================================================
                                 # ASK-QUESTION
 #========================================================================================================
@@ -37,7 +86,7 @@ def ask_question():
                 title=form.question_title.data,
                 tags=form.tags,
                 category=form.category.data,
-                description=form.details.data,
+                body=form.details.data,
                 slug=generate_slug(form.question_title.data),
                 user=current_user
             )
@@ -91,6 +140,8 @@ def category():
                                 # DASHBOARD
 #========================================================================================================
 @disc.route("/")
+def dash():
+    return redirect(url_for('discussion.dashboard'))
 @disc.route("/dashboard")
 def dashboard():
     # # Sample data, replace it with your actual data retrieval logic
@@ -115,3 +166,7 @@ def get_questions():
     pass
 
 #========================================================================================================
+@disc.route('/answer', methods=['GET', 'POST'])
+@login_required
+def answer():
+    pass
