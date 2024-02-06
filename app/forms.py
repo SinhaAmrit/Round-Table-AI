@@ -38,11 +38,12 @@ class ChangePasswordForm(FlaskForm):
 #========================================================================================================
 class UserProfileForm(FlaskForm):
 
-    full_name = StringField('Full Name')
-    location = StringField('Location')
+    full_name = StringField('Full Name', [validators.DataRequired()])
+    location = StringField('Location', [validators.DataRequired()])
     about_me = TextAreaField('About Me')
 
     website_link = StringField('Website Link', [validators.Optional(), validators.URL()])
+    linkedin_link = StringField('Twitter Link', [validators.Optional(), validators.URL()])
     twitter_link = StringField('Twitter Link', [validators.Optional(), validators.URL()])
     facebook_link = StringField('Facebook Link', [validators.Optional(), validators.URL()])
     instagram_link = StringField('Instagram Link', [validators.Optional(), validators.URL()])
@@ -53,7 +54,6 @@ class UserProfileForm(FlaskForm):
     profile_photo = StringField('Profile Photo')
 
     submit = SubmitField('Save Changes')
-
 #========================================================================================================
                                 # Email Settings Form
 #========================================================================================================
@@ -70,6 +70,23 @@ class EmailSettingsForm(FlaskForm):
     
     submit = SubmitField('Save')
 
+#========================================================================================================
+                                # PrivacyForm
+#======================================================================================================== 
+class PrivacyForm(FlaskForm):
+    profile_photo = SelectField('Profile Picture', choices=[('Public', 'Public'), ('Followers', 'Followers'), ('Only me', 'Only me')], coerce=str)
+    email_privacy = SelectField('Email Privacy', choices=[('Public', 'Public'), ('Followers', 'Followers'), ('Only me', 'Only me')], coerce=str)
+    biography = SelectField('Biography', choices=[('Public', 'Public'), ('Followers', 'Followers'), ('Only me', 'Only me')], coerce=str)
+    country = SelectField('Country', choices=[('Public', 'Public'), ('Followers', 'Followers'), ('Only me', 'Only me')], coerce=str)
+    social_links = SelectField('Social Links', choices=[('Public', 'Public'), ('Followers', 'Followers'), ('Only me', 'Only me')], coerce=str)
+    
+    submit = SubmitField('Save Changes')
+#========================================================================================================
+                                # DeleteAccountForm
+#========================================================================================================
+class DeleteAccountForm(FlaskForm):
+    delete_terms = BooleanField('I have read the information stated above and understand the implications of having my profile deleted. I wish to proceed with the deletion of my profile.', [validators.DataRequired()])
+    delete_button = SubmitField('Delete your account')
 #========================================================================================================
                                 # validate_tags function
 #========================================================================================================
