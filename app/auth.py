@@ -181,7 +181,7 @@ def login():
         else:
             user = User.query.filter_by(email=form.email.data).first()
 
-            if user:
+            if user and not user.deleted_at:
             # User found, check the password
                 print("User found")
                 if user.check_password(form.password.data):
@@ -242,14 +242,15 @@ def sign_out():
         # Update last_seen and set active to False
         current_user.details.last_seen = datetime.utcnow()
         current_user.details.active = False
-
+        is_deleted = current_user.deleted_at
         # Commit the changes
         db.session.commit()
 
         # Logout the user
         logout_user()
+        if not is_deleted:
+            flash('You have been logged out successfully!', 'success')
 
-        flash('You have been logged out successfully!', 'success')
         return redirect(url_for('views.home'))
 
     except Exception as e:
