@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
+from .auth import unauthorized_callback
 from .models import Question, Answer, Image
 from .forms import AskQuestionForm, AnswerForm
 import os
@@ -38,6 +39,23 @@ def question(slug):
                         'silver':que.user.details.silver,
                         'bronze':que.user.details.bronze
                     }
+                
+                answer_form = AnswerForm()
+                if request.method == 'POST' and answer_form.validate_on_submit():
+                    if current_user.is_authenticated:
+                        ans = Answer(
+                            body = answer_form.details.data,
+                            user = current_user,
+                            question = que
+                        )
+                        db.session.add(ans)
+                        db.session.commit()
+                        answer_form.details.data = ''
+                        flash('Answer uploaded successfully!', category='success')
+                
+                    else:
+                        return unauthorized_callback()
+                
                 answers = []
                 for ans in que.answers:
                     answers.append({
@@ -55,18 +73,8 @@ def question(slug):
                 
                 answers = sorted(answers, key=lambda x: x['vote'], reverse=True)
                 
-                form = AnswerForm()
-                if request.method == 'POST' and form.validate_on_submit():
-                    ans = Answer(
-                        body = form.details.data,
-                        user = current_user,
-                        question = que
-                    )
-                    db.session.add(ans)
-                    db.session.commit()
-                    ans = None
 
-                return render_template("discussion/question.html", question=question, answers=answers,answer_form=form, title="Questions")
+                return render_template("discussion/question.html", question=question, answers=answers,answer_form=answer_form, title="Questions")
             else:
                 flash('Discussion not found', 'error')
 
@@ -112,7 +120,7 @@ def ask_question():
             db.session.add(question)
             db.session.commit()
 
-            flash('Question uploaded successfully', category='success')
+            flash('Question uploaded successfully!', category='success')
             return redirect(url_for('discussion.question', slug=question.slug))
         else:
             flash('Error submitting the question. Please check your inputs.', 'error')
