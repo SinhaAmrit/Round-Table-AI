@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     details = db.relationship('UserDetail', uselist=False, back_populates='user', cascade="all, delete-orphan")
     conn_accounts = db.relationship('ConnAccount', uselist=False, back_populates='user', cascade="all, delete-orphan")
     email_settings = db.relationship('EmailSetting',uselist=False, back_populates='user')
+    privacy_settings = db.relationship('Privacy',uselist=False, back_populates='user')
     questions = db.relationship('Question', back_populates='user')
     answers = db.relationship('Answer', back_populates='user')
     notifications = db.relationship('Notification', back_populates='user')
@@ -31,6 +32,7 @@ class User(db.Model, UserMixin):
         self.username=username
         self.password_hash = generate_password_hash(password, method='sha256')
         self.email_settings = EmailSetting(email=self.email)
+        self.privacy_settings = Privacy(id=self.id)
         self.conn_accounts = ConnAccount(id=self.id)
         self.details = UserDetail(id=self.id)
 
@@ -60,6 +62,17 @@ class UserDetail(db.Model):
     def __init__(self, id):
         self.id = id
 
+#========================================================================================================
+                                # Privacy
+#========================================================================================================
+class Privacy(db.Model):
+    id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'), primary_key=True)
+    profile_photo = db.Column(db.String(10), default='Public')
+    email = db.Column(db.String(10), default='Only me')
+    biography = db.Column(db.String(10), default='Public')
+    country = db.Column(db.String(10), default='Public')
+    social_links = db.Column(db.String(10), default='Followers')
+    user = db.relationship('User', back_populates='privacy_settings')
 #========================================================================================================
                                 # QUESTION-TAG
 #========================================================================================================
