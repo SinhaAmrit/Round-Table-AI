@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
         self.name=name
         self.username=username
         self.password_hash = generate_password_hash(password, method='sha256')
-        self.email_settings = EmailSetting(email=self.email)
+        self.email_settings = EmailSetting(id=self.id)
         self.privacy_settings = Privacy(id=self.id)
         self.conn_accounts = ConnAccount(id=self.id)
         self.details = UserDetail(id=self.id)
@@ -61,7 +61,6 @@ class UserDetail(db.Model):
     user = db.relationship('User', back_populates='details')
     def __init__(self, id):
         self.id = id
-
 #========================================================================================================
                                 # Privacy
 #========================================================================================================
@@ -73,13 +72,14 @@ class Privacy(db.Model):
     country = db.Column(db.String(10), default='Public')
     social_links = db.Column(db.String(10), default='Followers')
     user = db.relationship('User', back_populates='privacy_settings')
+    def __init__(self, id):
+        self.id = id
 #========================================================================================================
                                 # QUESTION-TAG
 #========================================================================================================
-question_tag_association = db.Table('question_tag_association',
-    db.Column('question_id', UUID(as_uuid=True), db.ForeignKey('question.id')),
-    db.Column('tag_id', UUID(as_uuid=True), db.ForeignKey('tag.id'))
-)
+class QuestionTagAssociation(db.Model):
+    question_id = db.Column(UUID(as_uuid=True), db.ForeignKey('question.id'), primary_key=True)
+    tag_id = db.Column(UUID(as_uuid=True), db.ForeignKey('tag.id'), primary_key=True)
 #========================================================================================================
                                 # QUESTION
 #========================================================================================================
@@ -97,10 +97,11 @@ class Question(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     archived = db.Column(db.Boolean, default=False)
+    is_answered = db.Column(db.Boolean, default=False)
     user = db.relationship('User', back_populates='questions')
     images = db.relationship('Image', back_populates='question') 
     answers = db.relationship('Answer', back_populates='question')
-    tags = db.relationship('Tag', secondary=question_tag_association, back_populates='questions')
+    tags = db.relationship('Tag', secondary='question_tag_association', back_populates='questions')
 #========================================================================================================
                                 # TAGS
 #========================================================================================================
@@ -108,7 +109,7 @@ class Tag(db.Model):
     id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
-    questions = db.relationship('Question', secondary=question_tag_association, back_populates='tags')
+    questions = db.relationship('Question', secondary='question_tag_association', back_populates='tags')
 #========================================================================================================
                                 # IMAGE
 #========================================================================================================
@@ -126,6 +127,7 @@ class Notification(db.Model):
     type = db.Column(db.String(50))
     data = db.Column(db.TEXT)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
+    deleted_at = db.Column(db.TIMESTAMP, default=None)
     read_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     user = db.relationship('User', back_populates='notifications')
 #========================================================================================================
@@ -171,7 +173,8 @@ class History(db.Model):
                                 # EmailSettings
 #========================================================================================================
 class EmailSetting(db.Model):
-    email = db.Column(db.String(50), db.ForeignKey('user.email'), primary_key=True)
+    id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'), primary_key=True)
+    email = db.Column(db.String(50))
     feature_announcements = db.Column(db.String(3), default='Off')
     round_table = db.Column(db.String(3), default='Off')
     tips_reminders = db.Column(db.String(3), default='On')
@@ -181,4 +184,6 @@ class EmailSetting(db.Model):
     recommended_jobs = db.Column(db.String(3), default='Off')
     company_alerts = db.Column(db.String(6), default='Off')
     user = db.relationship('User', back_populates='email_settings')
+    def __init__(self, id):
+        self.id = id
 #========================================================================================================
