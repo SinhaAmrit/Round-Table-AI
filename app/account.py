@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .auth import is_strong_password
-from .models import User
+from .models import User, Notification
 from .forms import ChangePasswordForm, UserProfileForm, EmailSettingsForm, PrivacyForm, DeleteAccountForm
 from . import db
 from datetime import datetime
@@ -16,32 +16,45 @@ acc.config = {'UPLOAD_FOLDER': './uploads'}
 @acc.route('/notifications', methods=['GET'])
 @acc.route('/notifications/page<int:page>', methods=['GET'])
 @login_required
-def all_notification(page = 1):
-    total_noti = len(current_user.notifications)
-    total_pages = (max(1,total_noti) + 14) // 15
+def all_notification(page=1):
+    # Total number of notifications for the current user
+    total_notifications = Notification.query.filter(
+        Notification.user_id == current_user.id,
+        Notification.deleted_at == None
+    ).count()
 
+    # Calculate total pages for pagination
+    total_pages = (max(1, total_notifications) + 14) // 15
+
+    # Redirect to the first or last page if the requested page is out of bounds
     if page < 1:
         return redirect(url_for('account.all_notification'))
     elif page > total_pages:
         return redirect(url_for('account.all_notification', page=total_pages))
-    
+
+    # Fetch notifications for the requested page
+    queried_notifications = Notification.query.filter(
+        Notification.user_id == current_user.id,
+        Notification.deleted_at == None
+    ).order_by(Notification.created_at.desc()).slice((page - 1) * 15, page * 15).all()
+
     notifications = []
-    for noti in current_user.notifications[(page - 1)*15:(page*15)+15]:
+    # Prepare notification data for rendering
+    for notification in queried_notifications:
         notifications.append({
-            'data': noti.data,
-            'type': noti.type,
-            'created_ago': humanize.naturaltime(datetime.utcnow() - noti.created_at),
-            'read': noti.read_at
-            })
-    curr_noti = len(notifications)
-    notifications = sorted(notifications, key = lambda x: x['created_ago'])
-    return render_template("account/notifications.html", 
-                                title="Notifications", 
-                                notifications=notifications,
-                                page=page,
-                                total_pages=total_pages,
-                                curr_noti=curr_noti,
-                                total_noti = total_noti)
+            'data': notification.data,
+            'type': notification.type,
+            'event_url': notification.event_url,
+            'created_ago': humanize.naturaltime(datetime.utcnow() - notification.created_at),
+            'read': notification.read_at
+        })
+
+    return render_template("account/notifications.html",
+                            title="Notifications",
+                            notifications=notifications,
+                            page=page,
+                            total_pages=total_pages,
+                            total_notifications=total_notifications)
 #========================================================================================================
                                 # USER PROFILE
 #========================================================================================================
@@ -106,7 +119,6 @@ def settings():
                         email_settings_form=email_settings_form,
                         privacy_form=privacy_form,
                         delete_account_form=delete_account_form)
-
 #========================================================================================================
                                 # PROFILE SETTINGS
 #========================================================================================================

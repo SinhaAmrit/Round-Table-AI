@@ -44,15 +44,17 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="notification-content-wrap">
-                    {% for noti in notifications %}
+                    {% for notification in notifications %}
                     <div class="media media-card media--card shadow-none rounded-0 align-items-center bg-transparent">
                         <div class="media-img media-img-sm flex-shrink-0">
                             <img src="https://ui-avatars.com/api/?background=random&name=John+Doe" alt="avatar">
                         </div>
                         <div class="media-body p-0 border-left-0">
-                            <h5 class="fs-14 fw-regular">John Doe following your post</h5>
+                            <h5 class="fs-14 fw-regular">
+                                <a href="{{ notification['event_url'] }}">{{ notification['data'] }}</a>
+                            </h5>
                             <small class="meta d-block lh-24">
-                                <span>45 secs ago</span>
+                                <span>{{ notification['created_ago'] }}</span>
                             </small>
                         </div>
                         <button class="btn border border-gray fs-17 ml-2" type="button" data-toggle="tooltip"
@@ -253,7 +255,8 @@
                                     </a>
                                 </li>
                             {% endif %}
-                
+                            
+                            {% if total_notifications > 0 %}
                             {% if total_pages <= 10 %}
                                 {% for i in range(1, total_pages + 1) %}
                                     <li class="page-item {% if i == page %}active{% endif %}">
@@ -297,7 +300,8 @@
                                     </li>
                                 {% endif %}
                             {% endif %}
-                
+                            {% endif %}
+                            
                             {% if page < total_pages %}
                                 <li class="page-item">
                                     <a class="page-link" href="{{ url_for('account.all_notification', page=page+1) }}" aria-label="Next">
@@ -309,8 +313,8 @@
                         </ul>
                     </nav>
                     <p class="fs-13 pt-3">
-                        {% if total_noti > 0 %}
-                            Showing {{ 1 + (page - 1) * 15 }} - {{ (page - 1) * 15 + curr_noti }} results of {{ total_noti }} notifications
+                        {% if total_notifications > 0 %}
+                            Showing {{ 1+(page-1)*15 }} to {{ (page-1)*15 + notifications|length }} results of {{ total_notifications }} notifications
                         {% else %}
                             Nothing to report! No new notifications.
                         {% endif %}

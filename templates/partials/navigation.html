@@ -53,7 +53,7 @@
                     <div class="nav-right-button">
                         <ul class="user-action-wrap d-flex align-items-center">
                             <li class="dropdown">
-                                {% if current_user.notification|selectattr('read_at', '==', none)|list|length > 0 %}
+                                {% if current_user.notification|selectattr('read_at', '==', none)|selectattr('deleted_at', '==', none)|list|length > 0 %}
                                 <span class="ball red ball-lg noti-dot"></span>
                                 {% endif %}
                                 <a class="nav-link dropdown-toggle dropdown--toggle" href="#" id="notificationDropdown"
@@ -65,34 +65,40 @@
                                     <h6 class="dropdown-header"><i class="la la-bell pr-1 fs-16"></i>Notifications</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
-                                    {% set unread_notifications = current_user.notifications|selectattr('read_at', '==', none)|reverse %}
+                                    {% set unread_notifications = current_user.notifications|selectattr('read_at', '==', none)|selectattr('deleted_at', '==', none)|reverse %}
                                     {% if unread_notifications|length > 0 %}
                                         {% for notification in unread_notifications|slice(0, 5) %}
                                         <a class="dropdown-item" href="/notifications">
                                             <div class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                                 <div class="media-img media-img-sm flex-shrink-0">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name={{ notification.type}}"
+                                                    <img src="https://ui-avatars.com/api/?background=random&name={{ notification.type }}"
                                                         alt="avatar">
                                                 </div>
                                             <div class="media-body p-0 border-left-0">
-                                                <h5 class="fs-14 fw-regular">{{ notification.data }}</h5>
+                                                <h5 class="fs-14 fw-regular">
+                                                    <a href="{{ notification['event_url'] }}">{{ notification['data'] }}</a>
+                                                </h5>
                                                 <small class="meta d-block lh-24">
                                                     <span class="humanized-time" data-timestamp="{{ notification.created_at.timestamp() * 1000 }}">
                                                         {{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
                                                 </small>
                                             </div>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="text-center col-lg-12 pt-3">
+                                            <p class="fs-14 text-muted">You have no new notifications.</p>
                                         </div>
-                                    </a>
-                                    {% endfor %}
                                     {% endif %}
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function () {
                                         var humanizedTimes = document.querySelectorAll('.humanized-time');
-
+                                        
                                         humanizedTimes.forEach(function (element) {
                                         var timestamp = parseInt(element.getAttribute('data-timestamp'));
                                         var secondsAgo = Math.floor((Date.now() - timestamp) / 1000);
-
+                                        
                                         var interval = Math.floor(secondsAgo / 60);
                                         if (interval < 1) {
                                             element.textContent = "Just now";
@@ -207,6 +213,8 @@
                 aria-labelledby="user-notification-menu-tab">
                 <div class="dropdown--menu shadow-none w-auto rounded-0">
                     <div class="dropdown-item-list">
+                    {% if unread_notifications|length > 0 %}
+                        {% for notification in unread_notifications|slice(0, 5) %}
                         <a class="dropdown-item" href="/notifications">
                             <div
                                 class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
@@ -214,14 +222,23 @@
                                     <img src="https://ui-avatars.com/api/?background=random&name=John+Doe" alt="avatar">
                                 </div>
                                 <div class="media-body p-0 border-left-0">
-                                    <h5 class="fs-14 fw-regular">{{ current_user.username }}</h5>
+                                    <h5 class="fs-14 fw-regular">
+                                        <a href="{{ notification['event_url'] }}">{{ notification['data'] }}</a>
+                                    </h5>
                                     <small class="meta d-block lh-24">
-                                        <span>45 secs ago</span>
+                                        <span class="humanized-time" data-timestamp="{{ notification.created_at.timestamp() * 1000 }}">
+                                            {{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
                                     </small>
                                 </div>
                             </div>
                         </a>
-                        <a class="dropdown-item" href="/notifications">
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center col-lg-12 pt-3">
+                            <p class="fs-14 text-muted">You have no new notifications.</p>
+                        </div>
+                    {% endif %}
+                        <!--<a class="dropdown-item" href="/notifications">
                             <div
                                 class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                 <div class="media-img media-img-sm flex-shrink-0">
@@ -249,7 +266,7 @@
                                     </small>
                                 </div>
                             </div>
-                        </a>
+                        </a>-->
                     </div>
                     <a class="dropdown-item border-bottom-0 text-center btn-text fw-regular" href="/notifications">View
                         All Notifications <i class="la la-arrow-right icon ml-1"></i></a>
@@ -267,7 +284,7 @@
                 </div>
             </div><!-- end tab-pane -->
         </div>
-
+        
         <!-- Signed In User End -->
         {% else %}
         <!-- Guest Start -->
