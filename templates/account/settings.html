@@ -68,7 +68,7 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Edit your profile</h3>
                                 </div>
-                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-35px" enctype="multipart/form-data">
+                                <form action="{{ url_for('account.profile_settings') }}" method="post" class="pt-35px" enctype="multipart/form-data">
                                     {{ user_profile_form.hidden_tag() }}
                                     <div class="settings-item mb-10px">
                                         <h4 class="fs-14 pb-2 text-gray text-uppercase">Public information</h4>
@@ -79,7 +79,7 @@
                                                     <!--{% if user_profile_form.profile_photo.data %}
                                                         <img src="{{ current_user.details.profile_photo }}" alt="Profile Picture" class="profile-img mr-4">
                                                     {% else %}-->
-                                                        <img src="https://ui-avatars.com/api/?background=random&name={{ user_profile_form.full_name.data }}"
+                                                        <img src="https://ui-avatars.com/api/?background=random&name={{ current_user.name }}"
                                                             alt="user avatar" class="profile-img mr-4">
                                                     <!--{% endif %}-->
                                                     <div>
@@ -132,9 +132,27 @@
                                             </div><!-- end col-lg-6 -->
                                             <div class="col-lg-6">
                                                 <div class="input-box">
+                                                    <label class="fs-13 text-black lh-20 fw-medium">GitHub link</label>
+                                                    <div class="form-group">
+                                                            {{ user_profile_form.github_link(class="form-control form--control pl-40px") }}
+                                                        <span class="la la-github input-icon"></span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end col-lg-12 -->
+                                            <div class="col-lg-6">
+                                                <div class="input-box">
+                                                    <label class="fs-13 text-black lh-20 fw-medium">LinkedIn link</label>
+                                                    <div class="form-group">
+                                                            {{ user_profile_form.linkedin_link(class="form-control form--control pl-40px") }}
+                                                        <span class="la la-linkedin input-icon"></span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end col-lg-6 -->
+                                            <div class="col-lg-6">
+                                                <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Twitter link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.twitter_link(class="form-control form--control pl-40px") }}
+                                                            {{ user_profile_form.twitter_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-twitter input-icon"></span>
                                                     </div>
                                                 </div>
@@ -143,7 +161,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Facebook link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.facebook_link(class="form-control form--control pl-40px") }}
+                                                            {{ user_profile_form.facebook_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-facebook input-icon"></span>
                                                     </div>
                                                 </div>
@@ -152,7 +170,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Instagram link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.instagram_link(class="form-control form--control pl-40px") }}
+                                                            {{ user_profile_form.instagram_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-instagram input-icon"></span>
                                                     </div>
                                                 </div>
@@ -161,7 +179,7 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Youtube link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.youtube_link(class="form-control form--control pl-40px") }}
+                                                            {{ user_profile_form.youtube_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-youtube input-icon"></span>
                                                     </div>
                                                 </div>
@@ -170,23 +188,14 @@
                                                 <div class="input-box">
                                                     <label class="fs-13 text-black lh-20 fw-medium">Vimeo link</label>
                                                     <div class="form-group">
-                                                        {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px") }}
+                                                            {{ user_profile_form.vimeo_link(class="form-control form--control pl-40px") }}
                                                         <span class="la la-vimeo input-icon"></span>
                                                     </div>
                                                 </div>
                                             </div><!-- end col-lg-6 -->
                                             <div class="col-lg-12">
-                                                <div class="input-box">
-                                                    <label class="fs-13 text-black lh-20 fw-medium">GitHub link</label>
-                                                    <div class="form-group">
-                                                        {{ user_profile_form.github_link(class="form-control form--control pl-40px") }}
-                                                        <span class="la la-github input-icon"></span>
-                                                    </div>
-                                                </div>
-                                            </div><!-- end col-lg-12 -->
-                                            <div class="col-lg-12">
                                                 <div class="submit-btn-box pt-3">
-                                                    {{ user_profile_form.submit(class="btn theme-btn", value="Save Changes") }}
+                                                    {{ user_profile_form.submit(class="btn theme-btn") }}
                                                 </div>
                                             </div><!-- end col-lg-12 -->
                                         </div><!-- end row -->
@@ -202,7 +211,7 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Change password</h3>
                                 </div>
-                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
+                                <form action="{{ url_for('account.change_password') }}" method="post" class="pt-20px">
                                     {{ change_password_form.hidden_tag() }}
                                     <div class="settings-item mb-30px">
                                         <div class="form-group">
@@ -268,7 +277,7 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Email Settings</h3>
                                 </div>
-                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
+                                <form action="{{ url_for('account.email_settings') }}" method="post" class="pt-20px">
                                     {{ email_settings_form.hidden_tag() }}
                                     <div class="settings-item mb-30px border-bottom border-bottom-gray pb-30px">
                                         <label class="fs-13 text-black lh-20 fw-medium">Email Address</label>
@@ -444,60 +453,66 @@
                                     <h3 class="fs-17">Privacy Settings</h3>
                                     <p class="fs-13">Select who may see your profile details</p>
                                 </div>
-                                <form action="{{ url_for('account.settings') }}" method="post" class="pt-20px">
+                                <form action="{{ url_for('account.privacy_settings') }}" method="post" class="pt-20px">
+                                    {{ privacy_form.hidden_tag() }}
                                     <div class="settings-item">
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Profile Picture</label>
                                             <div class="form-group">
-                                                <select class="custom-select custom--select">
+                                                {{ privacy_form.profile_photo(class="custom-select custom--select") }}
+                                                <!--<select class="custom-select custom--select">
                                                     <option selected="selected" value="public">Public</option>
                                                     <option value="followers">Followers</option>
-                                                    <option value="me">Only me</option>
+                                                    <option value="me">Only me</option>-->
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Email</label>
                                             <div class="form-group">
-                                                <select class="custom-select custom--select">
+                                                {{ privacy_form.email_privacy(class="custom-select custom--select") }}
+                                                <!--<select class="custom-select custom--select">
                                                     <option selected="selected" value="public">Public</option>
                                                     <option value="followers">Followers</option>
                                                     <option value="me">Only me</option>
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Country</label>
                                             <div class="form-group">
-                                                <select class="custom-select custom--select">
+                                                {{ privacy_form.country(class="custom-select custom--select") }}
+                                                <!--<select class="custom-select custom--select">
                                                     <option selected="selected" value="public">Public</option>
                                                     <option value="followers">Followers</option>
                                                     <option value="me">Only me</option>
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Biography</label>
                                             <div class="form-group">
-                                                <select class="custom-select custom--select">
+                                                {{ privacy_form.biography(class="custom-select custom--select") }}
+                                                <!--<select class="custom-select custom--select">
                                                     <option selected="selected" value="public">Public</option>
                                                     <option value="followers">Followers</option>
                                                     <option value="me">Only me</option>
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
                                         <div class="input-box">
                                             <label class="fs-13 text-black lh-20 fw-medium">Social links</label>
                                             <div class="form-group">
-                                                <select class="custom-select custom--select">
+                                                {{ privacy_form.social_links(class="custom-select custom--select") }}
+                                                <!--<select class="custom-select custom--select">
                                                     <option selected="selected" value="public">Public</option>
                                                     <option value="followers">Followers</option>
                                                     <option value="me">Only me</option>
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
                                         <div class="submit-btn-box pt-3">
-                                            <button class="btn theme-btn" type="button">Save changes</button>
+                                            {{ privacy_form.submit(class="btn theme-btn", value="Save Changes") }}
                                         </div>
                                     </div><!-- end settings-item -->
                                 </form>
@@ -524,16 +539,19 @@
                                         </ul>
                                         <p class="pb-3 pt-2 lh-22 fs-15">Once you delete your account, there is no going
                                             back. Please be certain.</p>
-                                        <div class="custom-control custom-checkbox fs-15 mb-4">
-                                            <input type="checkbox" class="custom-control-input" id="delete-terms">
-                                            <label class="custom-control-label custom--control-label lh-22"
-                                                for="delete-terms">I have read the information stated above and
-                                                understand the implications of having my profile deleted. I wish to
-                                                proceed with the deletion of my profile.</label>
-                                        </div>
-                                        <button type="button" class="btn btn-danger fw-medium" data-toggle="modal"
-                                            data-target="#deleteModal" id="delete-button" disabled><i
-                                                class="la la-trash mr-1"></i> Delete your account</button>
+                                            <form action="{{ url_for('account.delete_account') }}" method="post" class="pt-20px">
+                                                {{ delete_account_form.hidden_tag() }}
+                                                <div class="custom-control custom-checkbox fs-15 mb-4">
+                                                    {{ delete_account_form.delete_terms(class="custom-control-input", id="delete-terms") }}
+                                                    <label class="custom-control-label custom--control-label lh-22" for="delete-terms">
+                                                        {{ delete_account_form.delete_terms.label }}
+                                                    </label>
+                                                </div>
+                                                <button type="submit" class="btn btn-danger fw-medium" data-toggle="modal"
+                                                        data-target="#deleteModal" id="delete-button" disabled>
+                                                    <i class="la la-trash mr-1"></i> {{ delete_account_form.delete_button.label }}
+                                                </button>
+                                            </form>
                                     </div>
                                 </div>
                             </div><!-- end user-panel -->

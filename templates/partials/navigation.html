@@ -53,7 +53,9 @@
                     <div class="nav-right-button">
                         <ul class="user-action-wrap d-flex align-items-center">
                             <li class="dropdown">
+                                {% if current_user.notification|selectattr('read_at', '==', none)|list|length > 0 %}
                                 <span class="ball red ball-lg noti-dot"></span>
+                                {% endif %}
                                 <a class="nav-link dropdown-toggle dropdown--toggle" href="#" id="notificationDropdown"
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="la la-bell"></i>
@@ -63,7 +65,9 @@
                                     <h6 class="dropdown-header"><i class="la la-bell pr-1 fs-16"></i>Notifications</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
-                                    {% for notification in current_user.notifications[:5]|reverse %}
+                                    {% set unread_notifications = current_user.notifications|selectattr('read_at', '==', none)|reverse %}
+                                    {% if unread_notifications|length > 0 %}
+                                        {% for notification in unread_notifications|slice(0, 5) %}
                                         <a class="dropdown-item" href="/notifications">
                                             <div class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
                                                 <div class="media-img media-img-sm flex-shrink-0">
@@ -80,6 +84,7 @@
                                         </div>
                                     </a>
                                     {% endfor %}
+                                    {% endif %}
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function () {
                                         var humanizedTimes = document.querySelectorAll('.humanized-time');
@@ -147,7 +152,7 @@
                                     <h6 class="dropdown-header">Hi, {{ current_user.name }}</h6>
                                     <div class="dropdown-divider border-top-gray mb-0"></div>
                                     <div class="dropdown-item-list">
-                                        <a class="dropdown-item" href="/user-profile"><i
+                                        <a class="dropdown-item" href="{{ url_for('account.user_profile') }}"><i
                                                 class="la la-user mr-2"></i>Profile</a>
                                         <a class="dropdown-item" href="/notifications"><i
                                                 class="la la-bell mr-2"></i>Notifications</a>

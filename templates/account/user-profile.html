@@ -17,9 +17,9 @@
                             <img src="https://ui-avatars.com/api/?background=random&name={{ user.name }}" alt="avatar">
                         </div>
                         <div class="media-body">
-                        <h5>{{ user.name }}</h5>
+                        <h5>{{ user['name'] }}</h5>
                             <small class="meta d-block lh-20 pb-2">
-                                <span>{{ user.country }}, member since {{ time_ago }}</span>
+                                <span>{{ user['country'] }}, member since {{ user['created_ago'] }}</span>
                             </small>
                             <div class="stats fs-14 fw-medium d-flex align-items-center lh-18">
                                 <span class="text-black pr-2" title="Reputation">224,110</span>
@@ -34,7 +34,7 @@
                     </div><!-- end media -->
                 </div><!-- end hero-content -->
             </div><!-- end col-lg-8 -->
-            {% if user.id == current_user.id %}
+            {% if user['username'] == current_user.username %}
             <div class="col-lg-4">
                 <div class="hero-btn-box text-right py-3">
                     <a href="/settings" class="btn theme-btn theme-btn-outline theme-btn-outline-gray"><i
@@ -45,7 +45,7 @@
             <div class="col-lg-12">
                 <ul class="nav nav-tabs generic-tabs generic--tabs generic--tabs-2 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="user-profile-tab" data-toggle="tab" href="#user-profile/{{ user.username }}"
+                        <a class="nav-link active" id="user-profile-tab" data-toggle="tab" href="#user-profile"
                             role="tab" aria-controls="user-profile" aria-selected="true">Profile</a>
                     </li>
                     <li class="nav-item">
@@ -68,32 +68,38 @@
                         aria-labelledby="user-profile-tab">
                         <div class="user-panel-main-bar">
                             <div class="user-panel mb-30px">
-                                <p class="pb-2">{{ user.about }}</p>
-                                <p class="pb-2">Programmer at <a href="#"
+                                <p class="pb-2">{{ user['about']|safe() }}</p>
+                                <!--<p class="pb-2">Programmer at <a href="#"
                                         class="text-color hover-underline">Bloomberg</a>. Posts and commments are my
                                     opinions and are not sponsored or endorsed by my employer.</p>
                                 <p>If my answers helped you can <a href="#" class="text-color hover-underline">buy me a
-                                        coffee.</a></p>
+                                        coffee.</a></p>-->
                             </div><!-- end user-panel -->
                             <div class="user-panel mb-30px pt-30px border-top border-top-gray">
                                 <ul class="generic-list-item generic-list-item-bullet">
-                                    {% if user.conn_accounts.github %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.github }}" class="d-inline-block">GitHub</a></li>
+                                    {% if user['website'] %}
+                                        <li class="pl-3"><a href="{{ user['website'] }}" class="d-inline-block">Website</a></li>
                                     {% endif %}
-                                    {% if user.conn_accounts.stackoverflow %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.stackoverflow }}" class="d-inline-block">Stack Overflow</a></li>
+                                    {% if user['twitter'] %}
+                                        <li class="pl-3"><a href="{{ user['twitter'] }}" class="d-inline-block">Twitter</a></li>
                                     {% endif %}
-                                    {% if user.conn_accounts.linkedIn %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.linkedIn }}" class="d-inline-block">LinkedIn</a></li>
+                                    {% if user['facebook'] %}
+                                        <li class="pl-3"><a href="{{ user['facebook'] }}" class="d-inline-block">Facebook</a></li>
                                     {% endif %}
-                                    {% if user.conn_accounts.facebook %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.facebook }}" class="d-inline-block">Facebook</a></li>
+                                    {% if user['instagrom'] %}
+                                        <li class="pl-3"><a href="{{ user['instagram'] }}" class="d-inline-block">Instagram</a></li>
                                     {% endif %}
-                                    {% if user.conn_accounts.twitter %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.twitter }}" class="d-inline-block">Twitter</a></li>
+                                    {% if user['linkedIn'] %}
+                                        <li class="pl-3"><a href="{{ user['linkedIn'] }}" class="d-inline-block">LinkedIn</a></li>
                                     {% endif %}
-                                    {% if user.conn_accounts.slack %}
-                                        <li class="pl-3"><a href="{{ user.conn_accounts.slack }}" class="d-inline-block">Slack</a></li>
+                                    {% if user['youtube'] %}
+                                        <li class="pl-3"><a href="{{ user['youtube'] }}" class="d-inline-block">Youtube</a></li>
+                                    {% endif %}
+                                    {% if user['vimeo'] %}
+                                        <li class="pl-3"><a href="{{ user['vimeo'] }}" class="d-inline-block">Vimeo</a></li>
+                                    {% endif %}
+                                    {% if user['github'] %}
+                                        <li class="pl-3"><a href="{{ user['github'] }}" class="d-inline-block">GitHub</a></li>
                                     {% endif %}
                                 </ul>                                
                             </div><!-- end user-panel -->

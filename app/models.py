@@ -17,10 +17,13 @@ class User(db.Model, UserMixin):
     email_varified_at = db.Column(db.TIMESTAMP)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     update_at = db.Column(db.TIMESTAMP)
+    deleted_at = db.Column(db.TIMESTAMP)
     details = db.relationship('UserDetail', uselist=False, back_populates='user', cascade="all, delete-orphan")
     conn_accounts = db.relationship('ConnAccount', uselist=False, back_populates='user', cascade="all, delete-orphan")
     email_settings = db.relationship('EmailSetting',uselist=False, back_populates='user')
+    privacy_settings = db.relationship('Privacy',uselist=False, back_populates='user')
     questions = db.relationship('Question', back_populates='user')
+    answers = db.relationship('Answer', back_populates='user')
     notifications = db.relationship('Notification', back_populates='user')
 
     def __init__(self, email, name, username, password):
@@ -29,6 +32,7 @@ class User(db.Model, UserMixin):
         self.username=username
         self.password_hash = generate_password_hash(password, method='sha256')
         self.email_settings = EmailSetting(email=self.email)
+        self.privacy_settings = Privacy(id=self.id)
         self.conn_accounts = ConnAccount(id=self.id)
         self.details = UserDetail(id=self.id)
 
@@ -46,8 +50,8 @@ class UserDetail(db.Model):
     role = db.Column(db.String(25), default='user')
     country = db.Column(db.String(25))
     status = db.Column(db.String(16), default='Using RoundTable')
-    reputation = db.Column(db.Integer, default=0)
     active = db.Column(db.Boolean, default=True)
+    reputation = db.Column(db.Integer, default=0)
     gold = db.Column(db.Integer, default=0)
     silver = db.Column(db.Integer, default=0)
     bronze = db.Column(db.Integer, default=0)
@@ -58,6 +62,17 @@ class UserDetail(db.Model):
     def __init__(self, id):
         self.id = id
 
+#========================================================================================================
+                                # Privacy
+#========================================================================================================
+class Privacy(db.Model):
+    id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'), primary_key=True)
+    profile_photo = db.Column(db.String(10), default='Public')
+    email = db.Column(db.String(10), default='Only me')
+    biography = db.Column(db.String(10), default='Public')
+    country = db.Column(db.String(10), default='Public')
+    social_links = db.Column(db.String(10), default='Followers')
+    user = db.relationship('User', back_populates='privacy_settings')
 #========================================================================================================
                                 # QUESTION-TAG
 #========================================================================================================
@@ -72,17 +87,19 @@ class Question(db.Model):
     id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'))
     title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.TEXT)
+    body = db.Column(db.TEXT)
     category = db.Column(db.String(50))
     slug = db.Column(db.String(50))
     vote = db.Column(db.Integer, default=0)
+    views = db.Column(db.Integer, default=0)
     summary = db.Column(db.TEXT)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
     updated_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     archived = db.Column(db.Boolean, default=False)
     user = db.relationship('User', back_populates='questions')
-    images = db.relationship('Image', back_populates='question')
+    images = db.relationship('Image', back_populates='question') 
+    answers = db.relationship('Answer', back_populates='question')
     tags = db.relationship('Tag', secondary=question_tag_association, back_populates='questions')
 #========================================================================================================
                                 # TAGS
@@ -112,16 +129,19 @@ class Notification(db.Model):
     read_at = db.Column(db.TIMESTAMP, nullable=True, default=None)
     user = db.relationship('User', back_populates='notifications')
 #========================================================================================================
-                                # REPLY
+                                # ANSWER
 #========================================================================================================
-class Reply(db.Model):
+class Answer(db.Model):
     id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'))
     question_id = db.Column(UUID(as_uuid=True), db.ForeignKey('question.id'))
-    content = db.Column(db.TEXT)
+    body = db.Column(db.TEXT)
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
+    updated_at = db.Column(db.TIMESTAMP)
     deleted_at = db.Column(db.TIMESTAMP)
     vote = db.Column(db.Integer, default=0)
+    question = db.relationship('Question', back_populates='answers')
+    user = db.relationship('User', back_populates='answers')
 #========================================================================================================
                                 # CONNECTED-ACCOUNT
 #========================================================================================================
@@ -144,16 +164,9 @@ class History(db.Model):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.id'))
     question_id = db.Column(UUID(as_uuid=True), db.ForeignKey('question.id'))
     is_liked = db.Column(db.Boolean, default=False)
-    reply_id = db.Column(UUID(as_uuid=True), db.ForeignKey('reply.id'))
+    answer_id = db.Column(UUID(as_uuid=True), db.ForeignKey('answer.id'))
     visited_at = db.Column(db.TIMESTAMP)
     deleted_at = db.Column(db.TIMESTAMP)
-#========================================================================================================
-                                # DISCUSSION-REPLY
-#========================================================================================================
-class DiscussReply(db.Model):
-    id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
-    question_id = db.Column(UUID(as_uuid=True), db.ForeignKey('question.id'))
-    reply_id = db.Column(UUID(as_uuid=True), db.ForeignKey('reply.id'))
 #========================================================================================================
                                 # EmailSettings
 #========================================================================================================
