@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
 from . import db
 from .auth import unauthorized_callback
@@ -19,8 +19,14 @@ disc = Blueprint('discussion', __name__)
 def question(slug):
         if slug:
             que = Question.query.filter_by(slug=slug).first()
-
+            
             if que and not que.deleted_at:
+                if not que.user.deleted_at:
+                    username = que.user.username
+                else:
+                    username = "user15319675"
+                que.views += 1
+                db.session.commit()
                 question = {'title' : que.title,
                         'body': que.body,
                         'category': que.category,
@@ -32,7 +38,7 @@ def question(slug):
                         'edited' : que.updated_at,
                         'archived': que.archived,
                         'tags':que.tags,
-                        'username': que.user.username,
+                        'username': username,
                         'name': que.user.name,
                         'reputation': que.user.details.reputation,
                         'gold':que.user.details.gold,
@@ -54,12 +60,18 @@ def question(slug):
                         flash('Answer uploaded successfully!', category='success')
                 
                     else:
-                        return unauthorized_callback()
+                        session['slug'] = slug
+                        return redirect(url_for('auth.sign_in', next=request.endpoint))
                 
                 answers = []
                 for ans in que.answers:
+                    if ans.user.deleted_at:
+                        username = ans.user.username
+                    else:
+                        username = "user15319675"
+
                     answers.append({
-                        'username': ans.user.username,
+                        'username': username,
                         'name': ans.user.name,
                         'reputation': ans.user.details.reputation,
                         'gold': ans.user.details.gold,
@@ -150,29 +162,67 @@ def category():
 @disc.route("/")
 def dash():
     return redirect(url_for('discussion.dashboard'))
-@disc.route("/dashboard")
-def dashboard():
-    # # Sample data, replace it with your actual data retrieval logic
-    # discussions = get_discussions()
-    # categories = get_categories()
-    # tags = get_tags()
+@disc.route("/dashboard", methods=['GET', 'POST'])
+@disc.route("/dashboard/page<int:page>", methods=['GET', 'POST'])
+def dashboard(page=1):
+    per_page = 15
+    category = 'newest'
+    queried_questions, total_questions = question_per_catogery(page, category, per_page)
+    
+    # Calculate total pages for pagination
+    total_pages = (max(1, total_questions) + per_page-1) // per_page
 
-    # # Retrieve filters from query parameters
-    # selected_category = request.args.get('category', 'All')
-    # selected_tag = request.args.get('tag', 'All')
+    # Redirect to the first or last page if the requested page is out of bounds
+    if page < 1:
+        return redirect(url_for('discussion.dashboard'))
+    elif page > total_pages:
+        return redirect(url_for('discussion.dashboard', page=total_pages))
+    
+    questions = []
+    # Prepare questions data for rendering
+    for question in queried_questions:
+        if not question.user.deleted_at:
+            username = question.user.username
+        else:
+            username = "user15319675"
+        
+        questions.append({
+            'title': question.title,
+            'vote': question.vote,
+            'answers': len(question.answers),
+            'is_answered': question.is_answered,
+            'created_ago': humanize.naturaltime(datetime.utcnow() - question.created_at),
+            'username': username,
+            'tags': question.tags,
+            'summary': question.summary,
+            'slug': question.slug
+            })
 
-    # # Apply filters
-    # filtered_discussions = filter_discussions(discussions, selected_category, selected_tag)
-
-    return render_template("discussion/dashboard.html", title="Dashboard")
-    #                         discussions=filtered_discussions, categories=categories, tags=tags, 
-    #                         selected_category=selected_category, selected_tag=selected_tag)
-
-# Add helper functions to retrieve data and filter discussions
-def get_questions():
-    # Implement your logic to retrieve discussions from the database or any other source
-    pass
-
+    return render_template("discussion/dashboard.html",
+                            title="Dashboard",
+                            questions=questions,
+                            page=page,
+                            total_pages=total_pages,
+                            total_questions=total_questions)
+#========================================================================================================
+def question_per_catogery(page, category='newest', per_page=15):
+    if category == 'newest':
+        questions = Question.query.filter(Question.deleted_at == None).order_by(Question.created_at.desc()).slice((page - 1) * per_page, page * per_page).all()
+        total_questions = Question.query.filter(Question.deleted_at == None).count()
+    elif category == 'featured':
+        questions = Question.query.filter(Question.bountied != None, Question.deleted_at == None).order_by(Question.created_at.desc()).slice((page - 1) * per_page, page * per_page).all()
+        total_questions = Question.query.filter(Question.bountied != None, Question.deleted_at == None).count()
+    elif category == 'frequent':
+        questions = Question.query.filter(Question.deleted_at == None).order_by(Question.views.desc()).slice((page - 1) * per_page, page * per_page).all()
+        total_questions = Question.query.filter(Question.deleted_at == None).count()
+    elif category == 'active':
+        questions = Question.query.filter(Question.active == True, Question.deleted_at == None).order_by(Question.created_at.desc()).slice((page - 1) * per_page, page * per_page).all()
+        total_questions = Question.query.filter(Question.active == True, Question.deleted_at == None).count()
+    elif category == 'unanswered':
+        questions = Question.query.filter(Question.answers == None, Question.deleted_at == None).order_by(Question.created_at.desc()).slice((page - 1) * per_page, page * per_page).all()
+        total_questions = Question.query.filter(Question.answers == None, Question.deleted_at == None).count()
+    
+    return questions, total_questions
 #========================================================================================================
 @disc.route('/answer', methods=['GET', 'POST'])
 @login_required
