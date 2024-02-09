@@ -49,23 +49,58 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="sidebar pb-45px position-sticky top-0 mt-2">
+                    <!-- <ul class="generic-list-item generic-list-item-highlight fs-15">
+                        <li class="lh-26 active"><a href="{{ url_for('discussion.dashboard') }}">
+                            <i class="la la-file-text mr-1 text-black"></i>All Topics</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='random') }}">
+                            <i class="la la-puzzle-piece mr-1 text-black"></i>Random</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='unanswered') }}">
+                            <i class="la la-check mr-1 text-black"></i>Unanswered</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='algorithm') }}">
+                            <i class="la la-pencil mr-1 text-black"></i>Algorithm</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='artificial-intelligence') }}">
+                            <i class="ri-android-line mr-1 text-black"></i>Artificial Intelligence</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='blockchain') }}">
+                            <i class="ri-blockchain-line mr-1 text-black"></i>Blockchain</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='cloud-computing') }}">
+                            <i class="ri-cloud-line mr-1 text-black"></i>Cloud Computing</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='coding') }}">
+                            <i class="ri-code-s-slash-line mr-1 text-black"></i>Coding</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='cybersecurity') }}">
+                            <i class="ri-security-line mr-1 text-black"></i>Cybersecurity</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='data-analysis') }}">
+                            <i class="la la-book-open mr-1 text-black"></i>Data Analysis</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='data-science') }}">
+                            <i class="ri-database-line mr-1 text-black"></i>Data Science</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='devops') }}">
+                            <i class="ri-tools-line mr-1 text-black"></i>DevOps</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='game-development') }}">
+                            <i class="ri-game-controller-line mr-1 text-black"></i>Game Development</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='iot') }}">
+                            <i class="ri-radar-line mr-1 text-black"></i>Internet of Things (IoT)</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='machine-learning') }}">
+                            <i class="ri-artificial-intelligence-line mr-1 text-black"></i>Machine Learning</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='mobile-development') }}">
+                            <i class="ri-mobile-line mr-1 text-black"></i>Mobile Development</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='robotics') }}">
+                            <i class="ri-robot-line mr-1 text-black"></i>Robotics</a></li>
+                        <li class="lh-26"><a href="{{ url_for('discussion.category', category='ui-ux') }}">
+                            <i class="ri-quill-pen-line mr-1 text-black"></i>UI/UX</a></li>
+                    </ul> -->
                     <ul class="generic-list-item generic-list-item-highlight fs-15">
-                        <li class="lh-26 active"><a href="#"><i class="la la-file-text mr-1 text-black"></i>
-                                All
-                                Topics</a></li>
-                        <li class="lh-26"><a href="#"><i class="la la-puzzle-piece mr-1 text-black"></i>
-                                Random</a></li>
-                        <li class="lh-26"><a href="#"><i class="la la-check mr-1 text-black"></i>
-                                Unanswered</a></li>
-                        <li class="lh-26"><a href="#"><i class="la la-pencil mr-1 text-black"></i>
-                                Algorithm</a>
-                        </li>
-                        <li class="lh-26"><a href="#"><i class="ri-code-s-slash-line"></i>
-                                Coding</a></li>
-                        <li class="lh-26"><a href="#"><i class="ri-quill-pen-line"></i>
-                                UI/UX</a></li>
-                        <li class="lh-26"><a href="#"><i class="la la-book-open mr-1 text-black"></i>
-                                Data Analysis</a></li>
+                        <li class="lh-26 active"><a href="{{ url_for('discussion.dashboard') }}">
+                            <i class="la la-file-text mr-1 text-black"></i>All Topics</a></li>
+                        {% for category, icon in [
+                            ('random', 'la la-puzzle-piece'), ('unanswered', 'la la-check'),
+                            ('algorithm', 'la la-pencil'), ('artificial-intelligence', 'ri-brain-line'),
+                            ('cloud-computing', 'ri-cloud-line'),('coding', 'ri-code-s-slash-line'),
+                            ('data-analysis', 'la la-book-open'),('data-science', 'ri-bar-chart-2-line'),
+                            ('devops', 'ri-tools-line'),('internet-of-things', 'ri-radar-line'), 
+                            ('robotics', 'ri-robot-line'),('ui-ux', 'ri-quill-pen-line')] %}
+                            <li class="lh-26">
+                                <a href="{{ url_for('discussion.category', category=category) }}">
+                                    <i class="{{ icon }} mr-1 text-black"></i>{{ category.replace('-', ' ')|title }}</a>
+                        {% endfor %}
                     </ul>
                 </div><!-- end sidebar -->
             </div><!-- end col-lg-2 -->
@@ -124,7 +159,12 @@
                                             </div>
                                             <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
                                                 <span class="vote-counts">{{ question['answers'] }}</span>
-                                                <span class="answer-icon"></span>
+                                                {% if question['is_answered'] %}
+                                                    <i class="ml-2 ri-chat-smile-2-fill text-success"></i>
+                                                {% else %}
+                                                    <i class="ml-2 ri-chat-smile-3-line"></i>
+                                                {% endif %}
+                                                <!-- <span class="answer-icon"></span> -->
                                             </div>
                                         </div>
                                         <div class="media-body">
@@ -3118,7 +3158,7 @@
                     </div><!-- end card -->
                     <div class="card card-item">
                         <div class="card-body">
-                            <h3 class="fs-17 pb-3">Related Questions</h3>
+                            <h3 class="fs-17 pb-3">Trending Questions</h3>
                             <div class="divider"><span></span></div>
                             <div class="sidebar-questions pt-3">
                                 <div class="media media-card media--card media--card-2">
