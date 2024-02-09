@@ -119,7 +119,7 @@ def validate_tags(form, field):
 class AskQuestionForm(FlaskForm):
     question_title = StringField('Question Title', [validators.DataRequired()])
     tags = StringField('Tags', validators=[validate_tags])
-    category = SelectField('Category', choices=[('JavaScript', 'JavaScript'), ('Java', 'Java'), ('Python', 'Python'), ('C/C++', 'C/C++'), ('JQuery', 'JQuery'), ('SQL', 'SQL'), ('MongoDB', 'MongoDB'), ('PHP', 'PHP')], coerce=str)
+    category = SelectField('Category', choices=[('algorithm', 'Algorithm'), ('artificial-intelligence', 'Artificial Intelligence'), ('cloud-computing', 'Cloud Computing'), ('coding', 'Coding'), ('data-analysis', 'Data Analysis'), ('data-science', 'Data Science'), ('devops', 'DevOps'), ('internet-of-things', 'Internet of Things (IoT)'), ('robotics', 'Robotics'), ('ui-ux', 'UI/UX')], coerce=str)
     details = TextAreaField('Details', [validators.DataRequired()])
     image = MultipleFileField('Image')
     notified_me = BooleanField('Get notified by email when someone answers this question.', default=True)
