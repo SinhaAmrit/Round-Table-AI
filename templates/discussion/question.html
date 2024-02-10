@@ -181,7 +181,7 @@
             </div><!-- end post-menu -->
             <div class="media media-card user-media owner align-items-center">
                 <a href="/user/{{ question['username'] }}" class="media-img d-block">
-                    <img src="https://ui-avatars.com/api/?background=random&name=Arden+Smith" alt="avatar">
+                    <img src="https://ui-avatars.com/api/?background=random&name={{ question.name }}" alt="avatar">
                 </a>
                 <div class="media-body d-flex flex-wrap align-items-center justify-content-between">
                     <div>
@@ -476,7 +476,7 @@
             </div><!-- end post-menu -->
             <div class="media media-card user-media align-items-center">
                 <a href="/profile/" class="media-img d-block">
-                    <img src="https://ui-avatars.com/api/?background=random&name=Majed+Badawi" alt="avatar">
+                    <img src="https://ui-avatars.com/api/?background=random&name={{ answer.name }}" alt="avatar">
                 </a>
                 <div class="media-body d-flex align-items-center justify-content-between">
                     <div>
@@ -642,32 +642,35 @@
                 <div class="row no-gutters text-center">
                     <div class="col-lg-6 responsive-column-half">
                         <div class="icon-box pt-3">
-                            <span class="fs-20 fw-bold text-color">980k</span>
+                            <span class="fs-20 fw-bold text-color">{{ achievements['questions'] }}</span>
                             <p class="fs-14">Questions</p>
                         </div><!-- end icon-box -->
                     </div><!-- end col-lg-6 -->
                     <div class="col-lg-6 responsive-column-half">
                         <div class="icon-box pt-3">
-                            <span class="fs-20 fw-bold text-color-2">610k</span>
+                            <span class="fs-20 fw-bold text-color-2">{{ achievements['answers'] }}</span>
                             <p class="fs-14">Answers</p>
                         </div><!-- end icon-box -->
                     </div><!-- end col-lg-6 -->
                     <div class="col-lg-6 responsive-column-half">
                         <div class="icon-box pt-3">
-                            <span class="fs-20 fw-bold text-color-3">650k</span>
+                            <span class="fs-20 fw-bold text-color-3">{{ achievements['accepted_answers'] }}</span>
                             <p class="fs-14">Answer accepted</p>
                         </div><!-- end icon-box -->
                     </div><!-- end col-lg-6 -->
                     <div class="col-lg-6 responsive-column-half">
                         <div class="icon-box pt-3">
-                            <span class="fs-20 fw-bold text-color-4">320k</span>
+                            <span class="fs-20 fw-bold text-color-4">{{ achievements['users'] }}</span>
                             <p class="fs-14">Users</p>
                         </div><!-- end icon-box -->
                     </div><!-- end col-lg-6 -->
+                    {% if not current_user.is_authenticated %}
                     <div class="col-lg-12 pt-3">
                         <p class="fs-14">To get answer of question <a href="/signup"
-                                class="text-color hover-underline">Join<i class="la la-arrow-right ml-1"></i></a></p>
+                                class="text-color hover-underline">Join<i
+                                    class="la la-arrow-right ml-1"></i></a></p>
                     </div>
+                    {% endif %}
                 </div><!-- end row -->
             </div>
         </div><!-- end card -->
@@ -695,42 +698,21 @@
         </div><!-- end card -->
         <div class="card card-item">
             <div class="card-body">
-                <h3 class="fs-17 pb-3">Related Questions</h3>
+                <h3 class="fs-17 pb-3">Trending Questions</h3>
                 <div class="divider"><span></span></div>
                 <div class="sidebar-questions pt-3">
+                    {% for question in trending_questions %}
                     <div class="media media-card media--card media--card-2">
                         <div class="media-body">
-                            <h5><a href="/question/">How to select the dom element with
-                                    event.target</a></h5>
+                            <h5><a href="/question/{{ question['slug'] }}">{{ question['title'] }}</a></h5>
                             <small class="meta">
-                                <span class="pr-1">2 mins ago</span>
+                                <span class="pr-1">{{ question['created_ago'] }}</span>
                                 <span class="pr-1">. by</span>
-                                <a href="#" class="author">Sudhir Kumbhare</a>
+                                <a href="/user/{{ question['username'] }}" class="author">{{ question['username'] }}</a>
                             </small>
                         </div>
                     </div><!-- end media -->
-                    <div class="media media-card media--card media--card-2">
-                        <div class="media-body">
-                            <h5><a href="/question/">How can you cut an onion without
-                                    crying?</a></h5>
-                            <small class="meta">
-                                <span class="pr-1">48 mins ago</span>
-                                <span class="pr-1">. by</span>
-                                <a href="#" class="author">wimax</a>
-                            </small>
-                        </div>
-                    </div><!-- end media -->
-                    <div class="media media-card media--card media--card-2">
-                        <div class="media-body">
-                            <h5><a href="/question/">How to change the behavior of dropdown
-                                    buttons in HTML</a></h5>
-                            <small class="meta">
-                                <span class="pr-1">1 hour ago</span>
-                                <span class="pr-1">. by</span>
-                                <a href="#" class="author">Antonin gavrel</a>
-                            </small>
-                        </div>
-                    </div><!-- end media -->
+                    {% endfor %}
                 </div><!-- end sidebar-questions -->
             </div>
         </div><!-- end card -->
@@ -739,87 +721,28 @@
                 <h3 class="fs-17 pb-3">Trending Tags</h3>
                 <div class="divider"><span></span></div>
                 <div class="tags pt-4">
+                    {% for tag, count in tag_count %}
+                    {% if loop.index <= 5 %}
                     <div class="tag-item">
-                        <a href="#" class="tag-link tag-link-md">analytics</a>
-                        <span class="item-multiplier fs-13">
-                            <span>×</span>
-                            <span>32924</span>
-                        </span>
+                        <a href="#" class="tag-link tag-link-md">{{ tag }}</a>
+                            <span class="item-multiplier fs-13">
+                                <span>×</span>
+                                <span>{{ count }}</span>
+                            </span>
                     </div><!-- end tag-item -->
-                    <div class="tag-item">
-                        <a href="#" class="tag-link tag-link-md">computer</a>
-                        <span class="item-multiplier fs-13">
-                            <span>×</span>
-                            <span>32924</span>
-                        </span>
+                    {% else %}
+                    <div class="tag-item collapse" id="showMoreTags">
+                        <a href="#" class="tag-link tag-link-md">{{ tag }}</a>
+                            <span class="item-multiplier fs-13">
+                                <span>×</span>
+                                <span>{{ count }}</span>
+                            </span>
                     </div><!-- end tag-item -->
-                    <div class="tag-item">
-                        <a href="#" class="tag-link tag-link-md">python</a>
-                        <span class="item-multiplier fs-13">
-                            <span>×</span>
-                            <span>32924</span>
-                        </span>
-                    </div><!-- end tag-item -->
-                    <div class="tag-item">
-                        <a href="#" class="tag-link tag-link-md">javascript</a>
-                        <span class="item-multiplier fs-13">
-                            <span>×</span>
-                            <span>32924</span>
-                        </span>
-                    </div><!-- end tag-item -->
-                    <div class="tag-item">
-                        <a href="#" class="tag-link tag-link-md">c#</a>
-                        <span class="item-multiplier fs-13">
-                            <span>×</span>
-                            <span>32924</span>
-                        </span>
-                    </div><!-- end tag-item -->
-                    <div class="collapse" id="showMoreTags">
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">java</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">swift</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">html</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">angular</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">flutter</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
-                        <div class="tag-item">
-                            <a href="#" class="tag-link tag-link-md">machine-language</a>
-                            <span class="item-multiplier fs-13">
-                                <span>×</span>
-                                <span>32924</span>
-                            </span>
-                        </div><!-- end tag-item -->
+                    {% endif %}
+                    {% endfor %}
                     </div><!-- end collapse -->
-                    <a class="collapse-btn fs-13" data-toggle="collapse" href="#showMoreTags" role="button"
-                        aria-expanded="false" aria-controls="showMoreTags">
+                    <a class="collapse-btn fs-13" data-toggle="collapse" href="#showMoreTags" role="button" aria-expanded="false"
+                        aria-controls="showMoreTags">
                         <span class="collapse-btn-hide">Show more<i class="la la-angle-down ml-1 fs-11"></i></span>
                         <span class="collapse-btn-show">Show less<i class="la la-angle-up ml-1 fs-11"></i></span>
                     </a>
