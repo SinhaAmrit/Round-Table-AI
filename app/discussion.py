@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_required, current_user
 from sqlalchemy import func
 from . import db
-from .models import User, Question, Answer, Image, Tag, QuestionTagAssociation
+from .models import User, UserDetail, Question, Answer, Image, Tag, QuestionTagAssociation
 from .forms import AskQuestionForm, AnswerForm
 import os
 from werkzeug.utils import secure_filename
@@ -108,7 +108,14 @@ def question(slug):
                 answers = sorted(answers, key=lambda x: x['vote'], reverse=True)
                 
 
-                return render_template("discussion/question.html", question=question, answers=answers,answer_form=answer_form, title="Questions")
+                return render_template("discussion/question.html", 
+                                    question=question, 
+                                    answers=answers,
+                                    answer_form=answer_form, 
+                                    title="Questions", 
+                                    achievements=get_achievement(),
+                                    trending_questions=trending_questions(),
+                                    tag_count=tag_count())
             else:
                 flash('Discussion not found', 'error')
 
@@ -353,6 +360,7 @@ def dashboard(page=1):
     per_page = 15
     sort_by = 'newest'
     queried_questions, total_questions = question_sort_by(page, sort_by, per_page)
+    users, total_users = get_users(1, 20)
     
     # Calculate total pages for pagination
     total_pages = (max(1, total_questions) + per_page-1) // per_page
@@ -366,9 +374,44 @@ def dashboard(page=1):
     return render_template("discussion/dashboard.html",
                             title="Dashboard",
                             questions=get_questions(queried_questions),
-                            page=page,
-                            total_pages=total_pages,
+                            active={'questions': 'show active', 'jobs': '', 'tags': '', 'users': '', 'badges': ''},
+                            page={'question': page, 'user': 1},
+                            total_pages={'question': 1, 'user': total_pages},
                             total_questions=total_questions,
+                            users=users,
+                            total_users=total_users,
+                            achievements=get_achievement(),
+                            trending_questions=trending_questions(),
+                            tag_count=tag_count())
+#========================================================================================================
+                                # USER DASHBOARD
+#========================================================================================================
+@disc.route("/dashboard/users", methods=['GET', 'POST'])
+@disc.route("/dashboard/users/page<int:page>", methods=['GET', 'POST'])
+def user_dashboard(page=1):
+    per_page = 20
+    sort_by = 'newest'
+    queried_questions, total_questions = question_sort_by(1, sort_by, 15)
+    users, total_users = get_users(page, per_page)
+    
+    # Calculate total pages for pagination
+    total_pages = (max(1, total_users) + per_page-1) // per_page
+
+    # Redirect to the first or last page if the requested page is out of bounds
+    if page < 1:
+        return redirect(url_for('discussion.user_dashboard'))
+    elif page > total_pages:
+        return redirect(url_for('discussion.user_dashboard', page=total_pages))
+
+    return render_template("discussion/dashboard.html",
+                            title="Dashboard",
+                            questions=get_questions(queried_questions),
+                            active={'questions': '', 'jobs': '', 'tags': '', 'users': 'show active', 'badges': ''},
+                            page={'question': 1, 'user': page},
+                            total_pages={'question': 1, 'user': total_pages},
+                            total_questions=total_questions,
+                            users=users,
+                            total_users=total_users,
                             achievements=get_achievement(),
                             trending_questions=trending_questions(),
                             tag_count=tag_count())
@@ -394,6 +437,17 @@ def question_sort_by(page, sort_by='newest', per_page=15):
         return redirect(url_for('discussion.dashboard'))
     
     return questions, total_questions
+#========================================================================================================
+def get_users(page, per_page):
+    users = db.session.query(User.name,
+                            User.username,
+                            UserDetail.reputation,
+                            UserDetail.country
+                            ).join(UserDetail).filter(User.deleted_at == None
+                            ).order_by(UserDetail.reputation.desc()
+                            ).slice((page - 1) * per_page, page * per_page).all()
+    total_users = User.query.filter(User.deleted_at == None).count()
+    return users, total_users
 #========================================================================================================
 @disc.route('/answer', methods=['GET', 'POST'])
 @login_required

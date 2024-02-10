@@ -26,15 +26,15 @@
             <div class="col-lg-3">
                 <div class="hero-list hero-list-bg">
                     <div class="d-flex align-items-center pb-30px">
-                        <img src="static/images/anonymousHeroQuestions.svg" alt="question icon" class="mr-3">
+                        <img src="{{ url_for('static', filename='images/anonymousHeroQuestions.svg') }}" alt="question icon" class="mr-3">
                         <p class="fs-15 text-white lh-20">Anybody can ask a question</p>
                     </div>
                     <div class="d-flex align-items-center pb-30px">
-                        <img src="static/images/anonymousHeroAnswers.svg" alt="question answer icon" class="mr-3">
+                        <img src="{{ url_for('static', filename='images/anonymousHeroAnswers.svg') }}" alt="question answer icon" class="mr-3">
                         <p class="fs-15 text-white lh-20">Anybody can answer</p>
                     </div>
                     <div class="d-flex align-items-center">
-                        <img src="static/images/anonymousHeroUpvote.svg" alt="vote icon" class="mr-3">
+                        <img src="{{ url_for('static', filename='images/anonymousHeroUpvote.svg') }}" alt="vote icon" class="mr-3">
                         <p class="fs-15 text-white lh-20">The best answers are voted up and rise to the top</p>
                     </div>
                 </div>
@@ -73,28 +73,28 @@
                             <div class="anim-bar"></div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" id="questions-tab" data-toggle="tab" href="#questions" role="tab"
-                                aria-controls="questions" aria-selected="true">Questions</a>
+                            <a class="nav-link {{ active.questions }}" id="questions-tab" data-toggle="tab" href="#questions" role="tab"
+                                aria-controls="questions" aria-selected="false">Questions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab"
+                            <a class="nav-link {{ active.jobs }}" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab"
                                 aria-controls="jobs" aria-selected="false">Jobs</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ active.tags }}">
                             <a class="nav-link" id="tags-tab" data-toggle="tab" href="#tags" role="tab"
                                 aria-controls="tags" aria-selected="false">Tags</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ active.users }}">
                             <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab"
                                 aria-controls="users" aria-selected="false">Users</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ active.badges }}">
                             <a class="nav-link" id="badges-tab" data-toggle="tab" href="#badges" role="tab"
                                 aria-controls="badges" aria-selected="false">Badges</a>
                         </li>
                     </ul>
                     <div class="tab-content pt-40px" id="myTabContent">
-                        <div class="tab-pane fade show active" id="questions" role="tabpanel"
+                        <div class="tab-pane fade {{ active.questions }}" id="questions" role="tabpanel"
                             aria-labelledby="questions-tab">
                             <div class="filters d-flex align-items-center justify-content-between pb-4">
                                 <h3 class="fs-17 fw-medium">All Questions</h3>
@@ -148,39 +148,39 @@
                                 <div class="pager pt-30px mb-50px">
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination generic-pagination pr-1">
-                                            {% if page > 1 %}
+                                            {% if page.question > 1 %}
                                                 <li class="page-item">
-                                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page-1) }}" aria-label="Previous">
+                                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page.question-1) }}" aria-label="Previous">
                                                         <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
                                                         <span class="sr-only">Previous</span>
                                                     </a>
                                                 </li>
                                             {% endif %}
                                             {% if total_questions > 0 %}
-                                            {% if total_pages <= 10 %}
-                                                {% for i in range(1, total_pages + 1) %}
-                                                    <li class="page-item {% if i == page %}active{% endif %}">
+                                            {% if total_pages.question <= 10 %}
+                                                {% for i in range(1, total_pages.question + 1) %}
+                                                    <li class="page-item {% if i == page.question %}active{% endif %}">
                                                         <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
                                                     </li>
                                                 {% endfor %}
                                             {% else %}
-                                                {% if page <= 5 %}
+                                                {% if page.question <= 5 %}
                                                     {% for i in range(1, 8) %}
-                                                        <li class="page-item {% if i == page %}active{% endif %}">
+                                                        <li class="page-item {% if i == page.question %}active{% endif %}">
                                                             <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
                                                         </li>
                                                     {% endfor %}
                                                     <li class="page-item disabled"><span class="page-link">...</span></li>
                                                     <li class="page-item">
-                                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages) }}">{{ total_pages }}</a>
+                                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages.question) }}">{{ total_pages.question }}</a>
                                                     </li>
-                                                {% elif page > total_pages - 5 %}
+                                                {% elif page.question > total_pages.question - 5 %}
                                                     <li class="page-item">
                                                         <a class="page-link" href="{{ url_for('discussion.dashboard', page=1) }}">1</a>
                                                     </li>
                                                     <li class="page-item disabled"><span class="page-link">...</span></li>
-                                                    {% for i in range(total_pages - 6, total_pages + 1) %}
-                                                        <li class="page-item {% if i == page %}active{% endif %}">
+                                                    {% for i in range(total_pages.question - 6, total_pages.question + 1) %}
+                                                        <li class="page-item {% if i == page.question %}active{% endif %}">
                                                             <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
                                                         </li>
                                                     {% endfor %}
@@ -189,21 +189,21 @@
                                                         <a class="page-link" href="{{ url_for('discussion.dashboard', page=1) }}">1</a>
                                                     </li>
                                                     <li class="page-item disabled"><span class="page-link">...</span></li>
-                                                    {% for i in range(page - 2, page + 3) %}
-                                                        <li class="page-item {% if i == page %}active{% endif %}">
+                                                    {% for i in range(page.question - 2, page.question + 3) %}
+                                                        <li class="page-item {% if i == page.question %}active{% endif %}">
                                                             <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
                                                         </li>
                                                     {% endfor %}
                                                     <li class="page-item disabled"><span class="page-link">...</span></li>
                                                     <li class="page-item">
-                                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages) }}">{{ total_pages }}</a>
+                                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages.question) }}">{{ total_pages.question }}</a>
                                                     </li>
                                                 {% endif %}
                                             {% endif %}
                                             {% endif %}
-                                            {% if page < total_pages %}
+                                            {% if page.question < total_pages.question %}
                                                 <li class="page-item">
-                                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page+1) }}" aria-label="Next">
+                                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page.question+1) }}" aria-label="Next">
                                                         <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
                                                         <span class="sr-only">Next</span>
                                                     </a>
@@ -213,7 +213,7 @@
                                     </nav>
                                     <p class="fs-13 pt-3">
                                         {% if total_questions > 0 %}
-                                            Showing {{ 1+(page-1)*15 }} to {{ (page-1)*15 + questions|length }} results of {{ total_questions }} questions
+                                            Showing {{ 1+(page.question-1)*15 }} to {{ (page.question-1)*15 + questions|length }} results of {{ total_questions }} questions
                                         {% else %}
                                             Nothing to show!
                                         {% endif %}
@@ -1575,7 +1575,7 @@
                                 </div>
                             </div><!-- end tags-main-bar -->
                         </div><!-- end tab-pane -->
-                        <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                        <div class="tab-pane fade {{ active.users }}" id="users" role="tabpanel" aria-labelledby="users-tab">
                             <div class="filters pb-4">
                                 <h3 class="fs-17 fw-medium pb-4">Users</h3>
                                 <div class="d-flex flex-wrap align-items-center justify-content-between">
@@ -1600,329 +1600,98 @@
                             <div class="users-main-bar">
                                 <div class="users-snippet">
                                     <div class="row">
+                                        {% for name, username, reputation, location in users %}
                                         <div class="col-lg-6">
                                             <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Sector+Labs"
+                                                <a href="/user/{{ username }}" class="media-img d-inline-block">
+                                                    <img src="https://ui-avatars.com/api/?background=random&name={{ name }}"
                                                         alt="user avatar">
                                                 </a>
                                                 <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Sector
-                                                            labs</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
+                                                    <h5 class="fs-16 fw-medium"><a href="/user/{{ username }}">{{ name }}</a></h5>
+                                                    <small class="meta d-block lh-24 pb-1"><span>{{ location }}</span></small>
+                                                    <p class="fw-medium fs-15 text-black-50 lh-18">{{ reputation }}</p>
                                                 </div><!-- end media-body -->
                                             </div><!-- end media -->
                                         </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Barmar"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Barmar</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Certain+Performance"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">CertainPerformance</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=mck"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">mck</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Loic+The+Aztec"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">LoicTheAztec</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Günter+Zöchbauer"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Günter
-                                                            Zöchbauer</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Suragch"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Suragch</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Martijn+Pieters"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Martijn
-                                                            Pieters</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Frank+van+Puffelen"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Frank van
-                                                            Puffelen</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Igor+Goyda"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Igor
-                                                            Goyda</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Sector+Labs"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Sector
-                                                            labs</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Barmar"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Barmar</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Certain+Performance"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">CertainPerformance</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=mck"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">mck</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Loic+The+Aztec"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">LoicTheAztec</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Günter+Zöchbauer"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Günter
-                                                            Zöchbauer</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Suragch"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Suragch</a>
-                                                    </h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Martijn+Pieters"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Martijn
-                                                            Pieters</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Frank+van+Puffelen"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Frank van
-                                                            Puffelen</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-6">
-                                            <div class="media media-card p-3">
-                                                <a href="#" class="media-img d-inline-block">
-                                                    <img src="https://ui-avatars.com/api/?background=random&name=Igor+Goyda"
-                                                        alt="user avatar">
-                                                </a>
-                                                <div class="media-body">
-                                                    <h5 class="fs-16 fw-medium"><a href="/user">Igor
-                                                            Goyda</a></h5>
-                                                    <small class="meta d-block lh-24 pb-1"><span>New York, United
-                                                            States</span></small>
-                                                    <p class="fw-medium fs-15 text-black-50 lh-18">1,200</p>
-                                                </div><!-- end media-body -->
-                                            </div><!-- end media -->
-                                        </div><!-- end col-lg-6 -->
+                                        {% endfor %}
                                     </div><!-- end row -->
                                 </div><!-- end users-snippet -->
-                                <div class="pager d-flex align-items-center justify-content-between pt-10px pb-30px">
-                                    <div>
+                                <div class="pager d-flex flex-wrap align-items-center justify-content-between pt-30px">
+                                    <div class="pager pt-30px mb-50px">
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination generic-pagination pr-1">
+                                            {% if page.user > 1 %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=page.user-1) }}" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if total_users > 0 %}
+                                        {% if total_pages.user <= 10 %}
+                                        {% for i in range(1, total_pages.user + 1) %}
+                                        <li class="page-item {% if i == page.user %}active{% endif %}">
+                                            <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=i) }}">{{ i }}</a>
+                                        </li>
+                                        {% endfor %}
+                                        {% else %}
+                                            {% if page.user <= 5 %}
+                                            {% for i in range(1, 8) %}
+                                            <li class="page-item {% if i == page.user %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=i) }}">{{ i }}</a>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=total_pages.user) }}">{{ total_pages.user }}</a>
+                                            </li>
+                                            {% elif page.user > total_pages.user - 5 %}
                                                 <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous">
-                                                        <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
+                                                    <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=1) }}">1</a>
                                                 </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Next">
-                                                        <span aria-hidden="true"><i
-                                                                class="la la-arrow-right"></i></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <p class="fs-13 pt-3">Showing 1-20 results of 50,577 users</p>
-                                    </div>
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            {% for i in range(total_pages.user - 6, total_pages + 1) %}
+                                            <li class="page-item {% if i == page.user %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=i) }}">{{ i }}</a>
+                                            </li>
+                                            {% endfor %}
+                                            {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=1) }}">1</a>
+                                            </li>
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            {% for i in range(page.user - 2, page.user + 3) %}
+                                            <li class="page-item {% if i == page %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=i) }}">{{ i }}</a>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=total_pages.user) }}">{{ total_pages.user }}</a>
+                                            </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% endif %}
+                                        {% if page.user < total_pages.user %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('discussion.user_dashboard', page=page.user+1) }}" aria-label="Next">
+                                                <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        </ul>
+                                    </nav>
+                                    <p class="fs-13 pt-3">
+                                    {% if total_users > 0 %}
+                                        Showing {{ 1+(page.user-1)*15 }} to {{ (page.user-1)*15 + users|length }} results of {{ total_users }} users
+                                    {% else %}
+                                        Nothing to show!
+                                    {% endif %}
+                                    </p>
+                                </div>
                                     <div class="filter-option-box w-20">
                                         <select class="select-container">
                                             <option value="10">10 per page</option>
@@ -2727,13 +2496,23 @@
                             <div class="divider"><span></span></div>
                             <div class="tags pt-4">
                                 {% for tag, count in tag_count %}
-                                <div class="tag-item">
-                                    <a href="#" class="tag-link tag-link-md">{{ tag }}</a>
-                                    <span class="item-multiplier fs-13">
-                                        <span>×</span>
-                                        <span>{{ count }}</span>
-                                    </span>
-                                </div><!-- end tag-item -->
+                                    {% if loop.index <= 5 %}
+                                        <div class="tag-item">
+                                            <a href="#" class="tag-link tag-link-md">{{ tag }}</a>
+                                            <span class="item-multiplier fs-13">
+                                                <span>×</span>
+                                                <span>{{ count }}</span>
+                                            </span>
+                                        </div><!-- end tag-item -->
+                                    {% else %}
+                                        <div class="tag-item collapse" id="showMoreTags">
+                                            <a href="#" class="tag-link tag-link-md">{{ tag }}</a>
+                                            <span class="item-multiplier fs-13">
+                                                <span>×</span>
+                                                <span>{{ count }}</span>
+                                            </span>
+                                        </div><!-- end tag-item -->
+                                    {% endif %}
                                 {% endfor %}
                                 </div><!-- end collapse -->
                                 <a class="collapse-btn fs-13" data-toggle="collapse" href="#showMoreTags" role="button"
