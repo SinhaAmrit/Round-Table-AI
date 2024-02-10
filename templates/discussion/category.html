@@ -31,7 +31,7 @@
                 programming languages. In coding, questions about the logical and computational aspects of our digital
                 world are asked and answered, shaping our technological landscape with every line of code written and
                 every bug fixed.</p> -->
-            <p class="section-desc text-black">{{ total_questions }} Questions</p>
+            <p class="section-desc text-black">{{ total_questions['all'] }} Questions</p>
         </div><!-- end hero-content -->
     </div><!-- end container -->
 </section>
@@ -48,7 +48,7 @@
                                 <i class="la la-file-text mr-1 text-black"></i>All Topics</a></li>
                             {% for category, icon in categories_icons %}
                                 <li class="lh-26">
-                                    <a href="{{ url_for('discussion.category', category=category) }}">
+                                    <a href="{{ url_for('discussion.all_category', category=category) }}">
                                         <i class="{{ icon }} mr-1 text-black"></i>{{ category.replace('-', ' ')|title }}</a>
                             {% endfor %}
                         </ul>
@@ -62,35 +62,45 @@
                             <div class="anim-bar"></div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab"
+                            <a class="nav-link {{ active.all }}" id="all-tab" data-toggle="tab" href="#all" role="tab"
                                 aria-controls="all" aria-selected="true">All</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="unanswered-tab" data-toggle="tab" href="#unanswered" role="tab"
+                            <a class="nav-link {{ active.unanswered }}" id="unanswered-tab" data-toggle="tab" href="#unanswered" role="tab"
                                 aria-controls="unanswered" aria-selected="false">Unanswered</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="unsolved-tab" data-toggle="tab" href="#unsolved" role="tab"
+                            <a class="nav-link {{ active.unsolved }}" id="unsolved-tab" data-toggle="tab" href="#unsolved" role="tab"
                                 aria-controls="unsolved" aria-selected="false">Unsolved</a>
                         </li>
                     </ul>
                     <div class="tab-content pt-40px" id="myTabContent">
-                        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                        {% for menu, url in [('all', 'discussion.all_category'), ('unanswered', 'discussion.unanswered_category'), ('unsolved', 'discussion.unsolved_category')] %}
+                        {% if menu == 'all' %}
+                        <div class="tab-pane fade {{ active.all }}" id="all" role="tabpanel" aria-labelledby="all-tab">
                             <div class="question-main-bar all-question-bar">
                                 <div class="filters d-flex align-items-center justify-content-between pb-4">
                                     <h3 class="fs-17 fw-medium">All Questions</h3>
+                        {% elif menu == 'unanswered' %}
+                        <div class="tab-pane fade {{ active.unanswered }}" id="unanswered" role="tabpanel" aria-labelledby="best-tab">
+                            <div class="question-main-bar unanswered-question-bar">
+                                <div class="filters d-flex align-items-center justify-content-between pb-4">
+                                    <h3 class="fs-17 fw-medium">Unanswered</h3>
+                        {% elif menu == 'unsolved' %}
+                        <div class="tab-pane fade {{ active.unsolved }}" id="unsolved" role="tabpanel" aria-labelledby="unsolveed-tab">
+                            <div class="question-main-bar unsolved-question-bar">
+                                <div class="filters d-flex align-items-center justify-content-between pb-4">
+                                    <h3 class="fs-17 fw-medium">Unsolved</h3>
+                        {% endif %}
                                     <div class="filter-option-box w-20">
                                         <select class="select-container">
-                                            <option value="all" selected="selected">All</option>
-                                            <option value="newest">Newest</option>
+                                            <option value="newest" selected="selected">Newest</option>
                                             <option value="votes">Votes</option>
-                                            <option value="best">Best</option>
-                                            <option value="unanswered">Unanswered</option>
                                         </select>
                                     </div>
                                 </div><!-- end filters -->
                                 <div class="questions-snippet">
-                                    {% for question in all_questions %}
+                                    {% for question in questions[menu] %}
                                     <div class="media media-card media--card align-items-center">
                                         <div class="votes answered-accepted">
                                             <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
@@ -121,797 +131,97 @@
                                         </div>
                                     </div><!-- end media -->
                                     {% endfor %}
-                                    <!--<div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between"
-                                                title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between"
-                                                title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div>--end media -->
                                 </div><!-- end questions-snippet -->
-                            </div><!-- end question-main-bar -->
-                        </div><!-- end tab-pane -->
-                        <div class="tab-pane fade" id="unanswered" role="tabpanel" aria-labelledby="best-tab">
-                            <div class="question-main-bar unanswered-question-bar">
-                                <div class="filters pb-4">
-                                    <h3 class="fs-17 fw-medium">Unanswered</h3>
-                                </div><!-- end filters -->
-                                <div class="questions-snippet">
-                                    {% for question in unanswered_questions %}
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes answered-accepted">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">{{ question['vote'] }}</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">{{ question['answers'] }}</span>
-                                                {% if question['is_answered'] %}
-                                                    <i class="ml-2 ri-chat-smile-2-fill text-success"></i>
-                                                {% else %}
-                                                    <i class="ml-2 ri-chat-smile-3-line"></i>
-                                                {% endif %}
-                                                <!-- <span class="answer-icon"></span> -->
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question/{{ question['slug'] }}">{{ question['title'] }}</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">{{ question['created_ago'] }}</span>
-                                                <a href="/user/{{ question['username'] }}" class="author">{{ question['username'] }}</a>
-                                            </small>
-                                            <div class="tags">
-                                            {% for tag in question['tags'] %}
-                                                <a href="#" class="tag-link">{{ tag.title }}</a>
+                                <div class="pager d-flex flex-wrap align-items-center justify-content-between pt-30px">
+                                <div class="pager pt-30px mb-50px">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination generic-pagination pr-1">
+                                        {% if page[menu] > 1 %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for(url, category=category, page=page[menu]-1) }}" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if total_questions[menu] > 0 %}
+                                        {% if total_pages[menu] <= 10 %}
+                                        {% for i in range(1, total_pages[menu] + 1) %}
+                                        <li class="page-item {% if i == page[menu] %}active{% endif %}">
+                                            <a class="page-link" href="{{ url_for(url, category=category, page=i) }}">{{ i }}</a>
+                                        </li>
+                                        {% endfor %}
+                                        {% else %}
+                                            {% if page[menu] <= 5 %}
+                                            {% for i in range(1, 8) %}
+                                            <li class="page-item {% if i == page[menu] %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=i) }}">{{ i }}</a>
+                                            </li>
                                             {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div><!-- end media -->
-                                    {% endfor %}
-                                    <!--<div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                        <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                        <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                        <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                        <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                        <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media -->
-                                </div><!-- end questions-snippet -->
-                            </div><!-- end question-main-bar -->
-                        </div><!-- end tab-pane -->
-                        <div class="tab-pane fade" id="unsolved" role="tabpanel" aria-labelledby="unsolveed-tab">
-                            <div class="question-main-bar unsolved-question-bar">
-                                <div class="filters pb-4">
-                                    <h3 class="fs-17 fw-medium">Unsolved</h3>
-                                </div><!-- end filters -->
-                                <div class="questions-snippet">
-                                    {% for question in unsolved_questions %}
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes answered-accepted">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">{{ question['vote'] }}</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">{{ question['answers'] }}</span>
-                                                {% if question['is_answered'] %}
-                                                    <i class="ml-2 ri-chat-smile-2-fill text-success"></i>
-                                                {% else %}
-                                                    <i class="ml-2 ri-chat-smile-3-line"></i>
-                                                {% endif %}
-                                                <!-- <span class="answer-icon"></span> -->
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question/{{ question['slug'] }}">{{ question['title'] }}</a></h5>
-                                            <small class="meta">
-                                                <span class="pr-1">{{ question['created_ago'] }}</span>
-                                                <a href="/user/{{ question['username'] }}" class="author">{{ question['username'] }}</a>
-                                            </small>
-                                            <div class="tags">
-                                            {% for tag in question['tags'] %}
-                                                <a href="#" class="tag-link">{{ tag.title }}</a>
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=total_pages[menu]) }}">{{ total_pages[menu] }}</a>
+                                            </li>
+                                            {% elif page[menu] > total_pages[menu] - 5 %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{{ url_for(url, category=category, page=1) }}">1</a>
+                                                </li>
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            {% for i in range(total_pages[menu] - 6, total_pages + 1) %}
+                                            <li class="page-item {% if i == page[menu] %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=i) }}">{{ i }}</a>
+                                            </li>
                                             {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div><!-- end media -->
-                                    {% endfor %}
-                                    <!--<div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media --
-                                    <div class="media media-card media--card align-items-center">
-                                        <div class="votes">
-                                            <div class="vote-block d-flex align-items-center justify-content-between" title="Votes">
-                                                <span class="vote-counts">0</span>
-                                                <span class="vote-icon"></span>
-                                            </div>
-                                            <div class="answer-block d-flex align-items-center justify-content-between" title="Answers">
-                                                <span class="vote-counts">0</span>
-                                                <span class="answer-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h5><a href="/question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis, laboriosam illo!</a>
-                                            </h5>
-                                            <small class="meta">
-                                                <span class="pr-1">1 hour ago</span>
-                                                <a href="#" class="author">edublog</a>
-                                            </small>
-                                            <div class="tags">
-                                                <a href="#" class="tag-link">abcd</a>
-                                                <a href="#" class="tag-link">pqrs</a>
-                                                <a href="#" class="tag-link">tuvw</a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end media -->
-                                </div><!-- end questions-snippet -->
+                                            {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=1) }}">1</a>
+                                            </li>
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            {% for i in range(page[menu] - 2, page[menu] + 3) %}
+                                            <li class="page-item {% if i == page %}active{% endif %}">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=i) }}">{{ i }}</a>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for(url, category=category, page=total_pages[menu]) }}">{{ total_pages[menu] }}</a>
+                                            </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% endif %}
+                                        {% if page[menu] < total_pages[menu] %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for(url, category=category, page=page[menu]+1) }}" aria-label="Next">
+                                                <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        </ul>
+                                    </nav>
+                                    <p class="fs-13 pt-3">
+                                    {% if total_questions[menu] > 0 %}
+                                        Showing {{ 1+(page[menu]-1)*15 }} to {{ (page[menu]-1)*15 + questions[menu]|length }} results of {{ total_questions[menu] }} questions
+                                    {% else %}
+                                        Nothing to show!
+                                    {% endif %}
+                                    </p>
+                                </div>
+                                    <div class="filter-option-box w-20">
+                                        <select class="select-container">
+                                            <option value="10">10 per page</option>
+                                            <option selected="" value="15">15 per page</option>
+                                            <option value="20">20 per page</option>
+                                            <option value="30">30 per page</option>
+                                            <option value="40">40 per page</option>
+                                            <option value="50">50 per page</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div><!-- end question-main-bar -->
                         </div><!-- end tab-pane -->
+                        {% endfor %}
                     </div><!-- end tab-content -->
-                    <div class="pager pt-30px">
-                        <nav aria-label="Page navigation example">
-                        <ul class="pagination generic-pagination pr-1">
-                            {% if page > 1 %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page-1) }}" aria-label="Previous">
-                                        <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if total_questions > 0 %}
-                            {% if total_pages <= 10 %}
-                                {% for i in range(1, total_pages + 1) %}
-                                    <li class="page-item {% if i == page %}active{% endif %}">
-                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
-                                    </li>
-                                {% endfor %}
-                            {% else %}
-                                {% if page <= 5 %}
-                                    {% for i in range(1, 8) %}
-                                        <li class="page-item {% if i == page %}active{% endif %}">
-                                            <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
-                                        </li>
-                                    {% endfor %}
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages) }}">{{ total_pages }}</a>
-                                    </li>
-                                {% elif page > total_pages - 5 %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=1) }}">1</a>
-                                    </li>
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    {% for i in range(total_pages - 6, total_pages + 1) %}
-                                        <li class="page-item {% if i == page %}active{% endif %}">
-                                            <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
-                                        </li>
-                                    {% endfor %}
-                                {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=1) }}">1</a>
-                                    </li>
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    {% for i in range(page - 2, page + 3) %}
-                                        <li class="page-item {% if i == page %}active{% endif %}">
-                                            <a class="page-link" href="{{ url_for('discussion.dashboard', page=i) }}">{{ i }}</a>
-                                        </li>
-                                    {% endfor %}
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ url_for('discussion.dashboard', page=total_pages) }}">{{ total_pages }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-                            {% endif %}
-                
-                            {% if page < total_pages %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ url_for('discussion.dashboard', page=page+1) }}" aria-label="Next">
-                                        <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    <p class="fs-13 pt-3">
-                        {% if total_questions > 0 %}
-                            Showing {{ 1+(page-1)*15 }} to {{ (page-1)*15 + questions|length }} results of {{ total_questions }} questions
-                        {% else %}
-                            Nothing to show!
-                        {% endif %}
-                    </p>
-                    </div>
                 </div><!-- end question-tabs -->
             </div><!-- end col-lg-7 -->
             <div class="col-lg-3">
@@ -972,28 +282,6 @@
                                     </div>
                                 </div><!-- end media -->
                                 {% endfor %}
-                                <!--<div class="media media-card media--card media--card-2">
-                                    <div class="media-body">
-                                        <h5><a href="/question">Is it true while finding Time Complexity
-                                                of the algorithm [closed]</a></h5>
-                                        <small class="meta">
-                                            <span class="pr-1">48 mins ago</span>
-                                            <span class="pr-1">. by</span>
-                                            <a href="#" class="author">wimax</a>
-                                        </small>
-                                    </div>
-                                </div><!-- end media --
-                                <div class="media media-card media--card media--card-2">
-                                    <div class="media-body">
-                                        <h5><a href="/question">image picker and store them into
-                                                firebase with flutter</a></h5>
-                                        <small class="meta">
-                                            <span class="pr-1">1 hour ago</span>
-                                            <span class="pr-1">. by</span>
-                                            <a href="#" class="author">Antonin gavrel</a>
-                                        </small>
-                                    </div>
-                                </div><!-- end media -->
                             </div><!-- end sidebar-questions -->
                         </div>
                     </div><!-- end card -->
@@ -1011,77 +299,6 @@
                                     </span>
                                 </div><!-- end tag-item -->
                                 {% endfor %}
-                                <!--<div class="tag-item">
-                                    <a href="#" class="tag-link tag-link-md">computer</a>
-                                    <span class="item-multiplier fs-13">
-                                        <span>×</span>
-                                        <span>32924</span>
-                                    </span>
-                                </div><!-- end tag-item --
-                                <div class="tag-item">
-                                    <a href="#" class="tag-link tag-link-md">python</a>
-                                    <span class="item-multiplier fs-13">
-                                        <span>×</span>
-                                        <span>32924</span>
-                                    </span>
-                                </div><!-- end tag-item --
-                                <div class="tag-item">
-                                    <a href="#" class="tag-link tag-link-md">javascript</a>
-                                    <span class="item-multiplier fs-13">
-                                        <span>×</span>
-                                        <span>32924</span>
-                                    </span>
-                                </div><!-- end tag-item --
-                                <div class="tag-item">
-                                    <a href="#" class="tag-link tag-link-md">c#</a>
-                                    <span class="item-multiplier fs-13">
-                                        <span>×</span>
-                                        <span>32924</span>
-                                    </span>
-                                </div><!-- end tag-item --
-                                <div class="collapse" id="showMoreTags">
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">java</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item --
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">swift</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item --
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">html</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item --
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">angular</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item --
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">flutter</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item --
-                                    <div class="tag-item">
-                                        <a href="#" class="tag-link tag-link-md">machine-language</a>
-                                        <span class="item-multiplier fs-13">
-                                            <span>×</span>
-                                            <span>32924</span>
-                                        </span>
-                                    </div><!-- end tag-item -->
                                 </div><!-- end collapse -->
                                 <a class="collapse-btn fs-13" data-toggle="collapse" href="#showMoreTags" role="button" aria-expanded="false"
                                     aria-controls="showMoreTags">

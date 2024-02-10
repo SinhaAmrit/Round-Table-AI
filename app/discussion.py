@@ -167,71 +167,172 @@ def generate_slug(title):
 #========================================================================================================
                                 # CATEGORY
 #========================================================================================================
-@disc.route('/category/<category>', methods=['GET', 'POST'])
-@disc.route('/category/<category>-page<int:page>', methods=['GET', 'POST'])
-def category(category, page=1):
+@disc.route('/category/<category>/all', methods=['GET', 'POST'])
+@disc.route('/category/<category>/all-page<int:page>', methods=['GET', 'POST'])
+def all_category(category, page=1):
     per_page = 15
-    questions, unanswered, unsolved, total_questions, total_unanswered, total_unsolved = question_by_catogery(page, category, per_page)
-    
+    all, total_all = all_catogery_question(page, category, per_page)
+    unanswered, total_unanswered = unanswered_category_question(1, category, per_page)
+    unsolved, total_unsolved = unsolved_catogery_questions(1, category, per_page)
     # Calculate total pages for pagination
-    total_pages = (max(1, total_questions) + per_page-1) // per_page
-
+    total_pages = {'all': (max(1, total_all) + per_page-1) // per_page,
+                   'unanswered': (max(1, total_unanswered) + per_page-1) // per_page,
+                   'unsolved': (max(1, total_unsolved) + per_page-1) // per_page}
     # Redirect to the first or last page if the requested page is out of bounds
     if page < 1:
-        return redirect(url_for('discussion.category', category=category))
-    elif page > total_pages:
-        return redirect(url_for('discussion.category', category=category, page=total_pages))
+        return redirect(url_for('discussion.all_category', category=category))
+    elif page > total_pages['all']:
+        return redirect(url_for('discussion.all_category', category=category, page=total_pages['all']))
+    
+    questions = {'all': get_questions(all),
+                'unanswered': get_questions(unanswered),
+                'unsolved': get_questions(unsolved)}
 
     return render_template("discussion/category.html", 
                             title="Category",
-                            all_questions=get_questions(questions),
-                            unanswered_questions=get_questions(unanswered),
-                            unsolved_questions=get_questions(unsolved),
+                            questions=questions,
                             category=category,
-                            page=page,
+                            active={'all': 'show active', 'unanswered': '', 'unsolved': ''},
+                            page={'all': page, 'unanswered': 1, 'unsolved': 1},
                             total_pages=total_pages,
-                            total_questions=total_questions,
-                            total_unanswered=total_unanswered,
-                            total_unsolved=total_unsolved,
+                            total_questions={'all': total_all, 'unanswered': total_unanswered, 'unsolved': total_unsolved},
                             achievements=get_achievement(),
                             trending_questions= trending_questions(),
                             tag_count=tag_count())
 #========================================================================================================
-def question_by_catogery(page, category, per_page):
+                                # CATEGORY
+#========================================================================================================
+@disc.route('/category/<category>/unanswered', methods=['GET', 'POST'])
+@disc.route('/category/<category>/unanswered-page<int:page>', methods=['GET', 'POST'])
+def unanswered_category(category, page=1):
+    per_page = 15
+    all, total_all = all_catogery_question(1, category, per_page)
+    unanswered, total_unanswered = unanswered_category_question(page, category, per_page)
+    unsolved, total_unsolved = unsolved_catogery_questions(1, category, per_page)
+    # Calculate total pages for pagination
+    total_pages = {'all': (max(1, total_all) + per_page-1) // per_page,
+                   'unanswered': (max(1, total_unanswered) + per_page-1) // per_page,
+                   'unsolved': (max(1, total_unsolved) + per_page-1) // per_page}
+
+    # Redirect to the first or last page if the requested page is out of bounds
+    if page < 1:
+        return redirect(url_for('discussion.unanswered_category', category=category))
+    elif page > total_pages['unanswered']:
+        return redirect(url_for('discussion.unanswered_category', category=category, page=total_pages['unanswered']))
+
+    questions = {'all': get_questions(all),
+                'unanswered': get_questions(unanswered),
+                'unsolved': get_questions(unsolved)}
+
+    return render_template("discussion/category.html", 
+                            title="Category",
+                            questions=questions,
+                            category=category,
+                            active={'all': '', 'unanswered': 'show active', 'unsolved': ''},
+                            page={'all': 1, 'unanswered': page, 'unsolved': 1},
+                            total_pages=total_pages,
+                            total_questions={'all': total_all, 'unanswered': total_unanswered, 'unsolved': total_unsolved},
+                            achievements=get_achievement(),
+                            trending_questions= trending_questions(),
+                            tag_count=tag_count())
+#========================================================================================================
+                                # CATEGORY
+#========================================================================================================
+@disc.route('/category/<category>/unsolved', methods=['GET', 'POST'])
+@disc.route('/category/<category>/unsolved-page<int:page>', methods=['GET', 'POST'])
+def unsolved_category(category, page=1):
+    per_page = 15
+    all, total_all = all_catogery_question(1, category, per_page)
+    unanswered, total_unanswered = unanswered_category_question(1, category, per_page)
+    unsolved, total_unsolved = unsolved_catogery_questions(page, category, per_page)
+    # Calculate total pages for pagination
+    total_pages = {'all': (max(1, total_all) + per_page-1) // per_page,
+                   'unanswered': (max(1, total_unanswered) + per_page-1) // per_page,
+                   'unsolved': (max(1, total_unsolved) + per_page-1) // per_page}
+
+    # Redirect to the first or last page if the requested page is out of bounds
+    if page < 1:
+        return redirect(url_for('discussion.unsolved_category', category=category))
+    elif page > total_pages['unsolved']:
+        return redirect(url_for('discussion.unsolved_category', category=category, page=total_pages['unsolved']))
+
+    questions = {'all': get_questions(all),
+                'unanswered': get_questions(unanswered),
+                'unsolved': get_questions(unsolved)}
+
+    return render_template("discussion/category.html", 
+                            title="Category",
+                            questions=questions,
+                            category=category,
+                            active={'all': '', 'unanswered': '', 'unsolved': 'show active'},
+                            page={'all': 1, 'unanswered': 1, 'unsolved': page},
+                            total_pages=total_pages,
+                            total_questions={'all': total_all, 'unanswered': total_unanswered, 'unsolved': total_unsolved},
+                            achievements=get_achievement(),
+                            trending_questions= trending_questions(),
+                            tag_count=tag_count())
+#========================================================================================================
+def all_catogery_question(page, category, per_page):
     if category.lower() == 'random':
         if 'random_question_list' not in session:
             questions = Question.query.filter(Question.deleted_at == None).all()
-            unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).all()
-            unsolved = Question.query.filter(Question.deleted_at == None, Question.is_solved == False).all()
             random.shuffle(questions)
-            random.shuffle(unanswered)
-            random.shuffle(unsolved)
             session['random_question_list'] = questions
-            session['random_unanswered_list'] = unanswered
-            session['random_unsolved_list'] = unsolved
         total_questions = Question.query.filter(Question.deleted_at == None).count()
-        total_unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).count()
-        total_unsolved = Question.query.filter(Question.deleted_at == None, Question.is_solved == False).count()
         questions = session.get('random_question_list', [])
-        unanswered = session.get('random_unanswered_list', [])
-        unsolved = session.get('random_unsolved_list', [])
         questions = questions[(page - 1) * per_page: page * per_page]
-        unanswered = unanswered[(page - 1) * per_page: page * per_page]
-        unsolved = unsolved[(page - 1) * per_page: page * per_page]
-    
+        
     elif category.lower() == 'unanswered':
         questions = Question.query.filter(Question.deleted_at == None, Question.answers == None).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
         total_questions = Question.query.filter(Question.deleted_at == None, Question.answers == None).count()
-        unanswered = questions
-        total_unanswered = total_questions
-        unsolved = Question.query.filter(Question.deleted_at == None, Question.answers == None, Question.is_solved == False).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
-        total_unsolved = Question.query.filter(Question.deleted_at == None, Question.answers == None, Question.is_solved == False).count()
     
     elif category in ['algorithm', 'artificial-intelligence', 'cloud-computing', 'coding', 'data-analysis', 'data-science',  'devops', 'internet-of-things', 'robotics', 'ui-ux']:
         questions = Question.query.filter(Question.deleted_at == None, Question.category == category).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
         total_questions = Question.query.filter(Question.deleted_at == None, Question.category == category).count()
+        
+    else:
+        flash(f'The Category \'{category}\' not found!', category='error')
+        return redirect(url_for('discussion.dashboard'))
+
+    return questions, total_questions
+#========================================================================================================
+def unanswered_category_question(page, category, per_page):
+    if category.lower() == 'random':
+        if 'random_question_list' not in session:
+            unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).all()
+            random.shuffle(unanswered)
+            session['random_unanswered_list'] = unanswered
+        total_unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).count()
+        unanswered = session.get('random_unanswered_list', [])
+        unanswered = unanswered[(page - 1) * per_page: page * per_page]
+        
+    elif category.lower() == 'unanswered':
+        unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
+        total_unanswered = Question.query.filter(Question.deleted_at == None, Question.answers == None).count()
+    elif category in ['algorithm', 'artificial-intelligence', 'cloud-computing', 'coding', 'data-analysis', 'data-science',  'devops', 'internet-of-things', 'robotics', 'ui-ux']:
         unanswered = Question.query.filter(Question.deleted_at == None, Question.category == category, Question.answers == None).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
         total_unanswered = Question.query.filter(Question.deleted_at == None, Question.category == category, Question.answers == None).count()
+    else:
+        flash(f'The Category \'{category}\' not found!', category='error')
+        return redirect(url_for('discussion.dashboard'))
+
+    return unanswered, total_unanswered
+#========================================================================================================
+def unsolved_catogery_questions(page, category, per_page):
+    if category.lower() == 'random':
+        if 'random_question_list' not in session:
+            unsolved = Question.query.filter(Question.deleted_at == None, Question.is_solved == False).all()
+            random.shuffle(unsolved)
+            session['random_unsolved_list'] = unsolved
+        total_unsolved = Question.query.filter(Question.deleted_at == None, Question.is_solved == False).count()
+        unsolved = session.get('random_unsolved_list', [])
+        unsolved = unsolved[(page - 1) * per_page: page * per_page]
+    
+    elif category.lower() == 'unanswered':
+        unsolved = Question.query.filter(Question.deleted_at == None, Question.answers == None, Question.is_solved == False).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
+        total_unsolved = Question.query.filter(Question.deleted_at == None, Question.answers == None, Question.is_solved == False).count()
+    
+    elif category in ['algorithm', 'artificial-intelligence', 'cloud-computing', 'coding', 'data-analysis', 'data-science',  'devops', 'internet-of-things', 'robotics', 'ui-ux']:
         unsolved = Question.query.filter(Question.deleted_at == None, Question.category == category, Question.is_solved == False).order_by(Question.created_at.desc()).slice((page - 1) * 15, page * 15).all()
         total_unsolved = Question.query.filter(Question.deleted_at == None, Question.category == category, Question.is_solved == False).count()
     
@@ -239,7 +340,7 @@ def question_by_catogery(page, category, per_page):
         flash(f'The Category \'{category}\' not found!', category='error')
         return redirect(url_for('discussion.dashboard'))
 
-    return questions, unanswered, unsolved, total_questions, total_unanswered, total_unsolved
+    return unsolved, total_unsolved
 #========================================================================================================
                                 # DASHBOARD
 #========================================================================================================
