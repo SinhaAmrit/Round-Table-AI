@@ -1,14 +1,14 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask_login import login_user, login_required, logout_user, current_user
+from . import db, login_manager
 from .models import User
 from .forms import SignupForm, SigninForm
-from . import db, login_manager
-from datetime import datetime
-from flask_login import login_user, login_required, logout_user, current_user
+from datetime import datetime, timedelta
 import re
 
 # Create a Blueprint named 'auth'
 auth = Blueprint('auth', __name__)
-
+SESSION_TIMEOUT = 900
 #========================================================================================================
                                 # Sign Up
 #========================================================================================================
@@ -283,4 +283,21 @@ def unauthorized_callback():
     flash('Sign in first to access this page!', category='error')
     # Redirects the user to the login page while preserving the originally requested page (if available)
     return redirect(url_for('auth.login', next=request.endpoint))
+#========================================================================================================
+                                # Check Session Timeout
+#========================================================================================================
+@auth.before_request
+def check_session_timeout():
+    if current_user.is_authenticated and 'last_activity' in session:
+        last_activity_timestamp = session.get('last_activity', None)
+
+        if last_activity_timestamp:
+            last_activity_datetime = datetime.fromtimestamp(last_activity_timestamp)
+            
+            time_since_last_activity = datetime.now() - last_activity_datetime
+
+            if time_since_last_activity > timedelta(seconds=SESSION_TIMEOUT):
+                session.clear()
+
+    session['last_activity'] = datetime.now().timestamp()
 #========================================================================================================
